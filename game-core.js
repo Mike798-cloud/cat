@@ -15,7 +15,7 @@
     8:['final_date']
   };
   function fresh(){return {seen:{},stage:0,blackoutShown:false,ended:false,visits:0};}
-  function normalize(s){const n=fresh(); if(!s||typeof s!=='object') return n; n.seen={...(s.seen||{})}; n.blackoutShown=!!s.blackoutShown; n.ended=!!s.ended; n.visits=Number(s.visits)||0; n.stage=computeStage(n); return n;}
+  function normalize(s){const n=fresh(); if(!s||typeof s!=='object') return n; n.seen={...(s.seen||{})}; n.blackoutShown=!!s.blackoutShown; n.ended=!!s.ended&&!!n.seen.final_photo; n.visits=Number(s.visits)||0; n.stage=computeStage(n); return n;}
   function has(s,k){return !!(s.seen&&s.seen[k]);}
   function all(s,arr){return arr.every(k=>has(s,k));}
   function computeStage(s){
@@ -44,11 +44,9 @@
       if(!has(n,'folkname')) return ['为什么家里后来只叫大名？','待核：乳名 / 守灵 / 猫。'];
       if(!has(n,'blackout')) return ['桌面刚恢复出一个损坏缓存。','cache_1127.tmp 没有正常的文件头。'];
     }
-    if(st===5) return ['沈妍六岁为什么有一段“发烧请假”？','待核：请假单 / 寻人稿 / 2009 年南关旧帖。'];
+    if(st===5) return ['沈妍六岁为什么有一段“发烧请假”？','待核：请假单 / 寻人稿 / 2012 年南关旧帖。'];
     if(st===6) return ['母亲到底在怕什么？','待核：私人备忘 / 照片原图 / 旧日历。'];
     if(st===7) return ['沈妍真正误解了什么？','旧事时间表还有一格没填。'];
-    if(st===8&&!has(n,'final_photo')) return ['时间线已经排好了。','表格里的照片缩略图还能点开。'];
-    if(st===8) return ['这份表已经核完了。','关掉文件就好。'];
     return ['调查结束',''];
   }
   function completion(s){return Math.round(normalize(s).stage/8*100);}

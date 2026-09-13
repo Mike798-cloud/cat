@@ -3,58 +3,67 @@
   if(typeof module==='object'&&module.exports) module.exports=api;
   root.RenShengCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
-  const ORDER=['news5','school6','police4','hehui','zhao','address17','folkname','blackout','shenyan_absence','shenyan_notice','neighbor','private_notes','photo_meta','calendar','final_date','final_photo'];
+  const ORDER=['news5','school6','police4','hehui','teacher','address_owner','zhao','folkname','neighbor','shenyan_absence','shenyan_notice','backup_open','private_notes','calendar','photo_meta','final_date','final_photo'];
   const REQUIRED={
     1:['news5'],
     2:['news5','school6','police4'],
-    3:['hehui'],
-    4:['zhao'],
-    5:['address17','folkname','blackout'],
-    6:['shenyan_absence','shenyan_notice','neighbor'],
-    7:['private_notes','photo_meta','calendar'],
+    3:['hehui','teacher'],
+    4:['address_owner','zhao'],
+    5:['folkname'],
+    6:['neighbor','shenyan_absence','shenyan_notice'],
+    7:['private_notes','calendar','photo_meta'],
     8:['final_date','final_photo']
   };
-  function fresh(){return {seen:{},stage:0,blackoutShown:false,ended:false,visits:0};}
-  function normalize(s){const n=fresh(); if(!s||typeof s!=='object') return n; n.seen={...(s.seen||{})}; n.blackoutShown=!!s.blackoutShown; n.ended=!!s.ended&&!!n.seen.final_photo; n.visits=Number(s.visits)||0; n.stage=computeStage(n); return n;}
-  function has(s,k){return !!(s.seen&&s.seen[k]);}
+  function fresh(){return {seen:{},stage:0,ended:false,visits:0};}
+  function has(s,k){return !!(s&&s.seen&&s.seen[k]);}
   function all(s,arr){return arr.every(k=>has(s,k));}
   function computeStage(s){
     let stage=0;
-    if(all(s,REQUIRED[1])) stage=1;
-    if(stage===1 && all(s,REQUIRED[2])) stage=2;
-    if(stage===2 && all(s,REQUIRED[3])) stage=3;
-    if(stage===3 && all(s,REQUIRED[4])) stage=4;
-    if(stage===4 && all(s,REQUIRED[5])) stage=5;
-    if(stage===5 && all(s,REQUIRED[6])) stage=6;
-    if(stage===6 && all(s,REQUIRED[7])) stage=7;
-    if(stage===7 && all(s,REQUIRED[8])) stage=8;
+    for(let i=1;i<=8;i++){
+      if(all(s,REQUIRED[i])) stage=i;
+      else break;
+    }
     return stage;
   }
-  function mark(s,key){const n=normalize(s); n.seen[key]=true; n.visits++; n.stage=computeStage(n); return n;}
-  function shouldBlackout(s){return has(s,'hehui')&&!s.blackoutShown;}
-  function markBlackout(s){const n=normalize(s); n.blackoutShown=true; n.seen.blackout=true; n.stage=computeStage(n); return n;}
-  function anchor(s){
-    const n=normalize(s), st=n.stage;
-    if(st===0) return ['她为什么反复保存1996年的南关旧报？','先从她自己整理过的材料看起，别急着猜传言是真是假。'];
-    if(st===1){
-      if(!has(n,'school6')) return ['晚报说的“五个”，和学校记下的是同一批孩子吗？','同一天，不同单位记录的东西可能根本不是同一个口径。'];
-      if(!has(n,'police4')) return ['六个异常缺勤里，到底有几个真的进入了失踪记录？','“没来上学”和“正式报案”不是一回事。'];
-    }
-    if(st===2) return ['这些名字里，谁被家里接回以后很快离开了学校？','总数已经解释得通了，接下来该看具体的人。'];
-    if(st===3) return ['老太太一直问的“兰兰”是谁，她为什么说“回去了没有”？','如果她不是在追孩子，最早的传言可能从一开始就讲反了。'];
-    if(st===4){
-      if(!has(n,'address17')) return ['何惠回来以后说出的地址，为什么不是自己家？','她返校后的几天，比失踪本身留下了更多异常。'];
-      if(!has(n,'folkname')) return ['为什么家长突然不让别人叫她的小名？','这不像学校临时想出来的规矩。'];
-      if(!has(n,'blackout')) return ['同一周的资料到这里为什么突然断掉？','公开记录能解释人数，却解释不了何惠回来后的那些细节。'];
-    }
-    if(st===5) return ['沈妍六岁那两天到底发生过什么？','“发烧请假”只是一个说法，留下来的材料并不只这一份。'];
-    if(st===6) return ['何惠后来到底在害怕什么？','她成年后做的很多事，看起来都像在重复自己小时候家里做过的事。'];
-    if(st===7){
-      if(!has(n,'final_date')) return ['那张母女合影究竟拍在什么时候？','把沈妍失踪、回家和照片原始日期放到同一条时间线上。'];
-      return ['日期已经对上了，照片本身还留下了什么？','答案不在新出现的东西里，而在你从一开始就见过的那张照片上。'];
-    }
-    return ['没有新的问题了。','剩下的，只是你已经看见的那些材料。'];
+  function normalize(s){
+    const n=fresh();
+    if(!s||typeof s!=='object') return n;
+    n.seen={...(s.seen||{})};
+    n.visits=Number(s.visits)||0;
+    n.stage=computeStage(n);
+    n.ended=!!s.ended&&n.stage===8;
+    return n;
   }
+  function mark(s,key){const n=normalize(s);n.seen[key]=true;n.visits++;n.stage=computeStage(n);return n;}
+  function hintSet(s){
+    const n=normalize(s),st=n.stage;
+    if(st===0) return ['沈妍失踪前在查什么？','“沈妍的资料”里留着她最近整理的东西。','先看调查起点和1996年的剪报索引。'];
+    if(st===1){
+      if(!has(n,'school6')) return ['报纸里的“五个孩子”，和学校记录的是一回事吗？','学校旧站保留了1996年的校务附件。','从晚报11月24日那篇报道进入鹤宁二小旧站，打开11月25日考勤汇总。'];
+      if(!has(n,'police4')) return ['学校记下的异常缺勤，哪些真的报过警？','11月27日的晚报提到公开的接处警摘要。','回到11月27日报道，打开辖区接处警摘要。'];
+    }
+    if(st===2) return ['何惠回来以后，学校留下了什么？','旧学籍查询要姓名和出生日期；电脑里应该留过她的基本资料。','开始菜单里用“搜索”查“何惠”，打开户籍摘录，再去学校旧站查学籍。'];
+    if(st===3){
+      if(!has(n,'address_owner')) return ['“槐树巷17号”到底是谁家？','老师记录里的地址不是何惠户籍地址。地方文献能核旧门牌。','打开鹤宁市图书馆地方文献中心，查“槐树巷17号”。'];
+      if(!has(n,'zhao')) return ['赵淑琴和冯小兰是什么关系？','2005年前后有人在本地论坛重新讨论过“猫脸老太太”的传言。','去“南关人家”搜索“猫脸”或“兰兰”。'];
+    }
+    if(st===4) return ['何惠家为什么突然只叫她大名？','这件事不像学校自己的规定。地方文献里有老住户的口述。','在地方文献中心查“乳名”或“称呼”。'];
+    if(st===5){
+      if(!has(n,'neighbor')) return ['沈妍六岁那两天，外面的人记得什么？','2012年10月初，南关论坛里有人提到找孩子。','去“南关人家”搜索“2012”“早市”或“孩子”。'];
+      if(!has(n,'shenyan_absence')||!has(n,'shenyan_notice')) return ['何惠当年对学校是怎么说的？','资料盘里的旧备份需要账户和“回家那天”。','账户名在维修说明里；“回家那天”能从2012年的论坛帖确定。进入D盘 BACKUP_OLD。'];
+    }
+    if(st===6){
+      if(!has(n,'calendar')) return ['何惠自己留下过那几天的记录吗？','旧备份里还有一张2012年10月的日历扫描。','打开D盘备份里的“旧日历_2012_10.jpg”。'];
+      if(!has(n,'photo_meta')) return ['沈妍反复留下的那张照片是什么时候拍的？','照片的原始信息还在。','打开备份里的 IMG_2002.jpg，查看拍摄日期。'];
+      if(!has(n,'private_notes')) return ['沈妍查到这里时，自己记了什么？','她在旧备份里留了一份很短的调查备忘。','打开“调查备忘.txt”。'];
+    }
+    if(st===7){
+      if(!has(n,'final_date')) return ['把两代人的日期放到一起，还差哪一天？','调查记录.xls 最后一行只缺母女照片的拍摄日期。','打开调查记录.xls，按照片原始信息填入 2012-10-04。'];
+      return ['照片背面还有什么？','工作簿已经出现照片附件。','点开调查记录里的 IMG_2002.jpg 附件。'];
+    }
+    return ['调查已经到这里。','没有新的入口。剩下的是你已经看过的材料。','关闭调查记录即可结束。'];
+  }
+  function anchor(s,level=0){const h=hintSet(s);return [h[0],h[Math.max(1,Math.min(2,level+1))]];}
   function completion(s){return Math.round(normalize(s).stage/8*100);}
-  return {fresh,normalize,has,mark,computeStage,shouldBlackout,markBlackout,anchor,completion,ORDER};
+  return {fresh,normalize,has,mark,computeStage,anchor,hintSet,completion,ORDER};
 });

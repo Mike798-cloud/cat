@@ -35,18 +35,18 @@
   function markBlackout(s){const n=normalize(s); n.blackoutShown=true; n.seen.blackout=true; n.stage=computeStage(n); return n;}
   function anchor(s){
     const n=normalize(s), st=n.stage;
-    if(st===0) return ['她最后在查什么？','最后打开：1996资料 / 剪报索引。'];
-    if(st===1) return ['当年到底发生了几起儿童失联？','待核：学校考勤 / 辖区案号。'];
-    if(st===2) return ['哪几个孩子真的失联？谁回来了？','待核：何惠 / 转学日期。'];
-    if(st===3) return ['最早的“老太太找孩子”是谁？','待核：兰兰 / 赵淑琴 / 南关旧帖。'];
+    if(st===0) return ['1996那批剪报还没看完。','先从11月24日那篇开始。'];
+    if(st===1) return ['晚报说五个，学校和派出所会怎么记？','把考勤和辖区记录分别看一遍。'];
+    if(st===2) return ['何惠应该就在那几份名单里。','她后来为什么突然转学，我也想知道。'];
+    if(st===3) return ['老太太一直找的“兰兰”到底是谁？','旧论坛里有人记得当年的说法。'];
     if(st===4){
-      if(!has(n,'address17')) return ['何惠回来后为什么立刻转学？','待核：班主任工作记录。'];
-      if(!has(n,'folkname')) return ['为什么家里后来只叫大名？','待核：乳名 / 守灵 / 猫。'];
-      if(!has(n,'blackout')) return ['桌面刚恢复出一个损坏缓存。','cache_1127.tmp 没有正常的文件头。'];
+      if(!has(n,'address17')) return ['何惠返校以后还发生了什么？','班主任那份工作记录没看完。'];
+      if(!has(n,'folkname')) return ['为什么家里后来不再叫她小名？','地方资料里也许有人提过这种规矩。'];
+      if(!has(n,'blackout')) return ['桌面刚多出一个损坏缓存。','cache_1127.tmp 的时间和班主任记录是同一天。'];
     }
-    if(st===5) return ['沈妍六岁为什么有一段“发烧请假”？','待核：请假单 / 寻人稿 / 2012 年南关旧帖。'];
-    if(st===6) return ['母亲到底在怕什么？','待核：私人备忘 / 照片原图 / 旧日历。'];
-    if(st===7) return ['沈妍真正误解了什么？','旧事时间表还有一格没填。'];
+    if(st===5) return ['我六岁那两天真的只是在家发烧吗？','请假单、寻人稿和南关旧帖应该能对上。'];
+    if(st===6) return ['妈到底在怕什么？','备忘、照片原图和她留下的旧日历还没对完。'];
+    if(st===7) return ['那张照片究竟是第几天拍的？','时间表最后一格还空着。'];
     return ['调查结束',''];
   }
   function completion(s){return Math.round(normalize(s).stage/8*100);}

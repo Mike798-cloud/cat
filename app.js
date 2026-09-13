@@ -60,30 +60,46 @@ function desktopHTML(){
  const cacheReady=has('hehui');
  return `<div class="os"><div class="desktop">
    <div class="desk-icons">
-    ${deskDecor('computer','我的电脑')}
-    ${deskDecor('trash','回收站')}
-    ${deskIcon('folder','folder','沈妍的资料')}
-    ${deskDecor('folder','未整理')}
+    ${deskIcon('computer','computer','我的电脑')}
+    ${deskIcon('trash','recycle','回收站')}
+    ${deskIcon('folder','syfolder','沈妍的资料')}
+    ${deskIcon('folder','unsorted','未整理')}
     ${deskIcon('folder','folder','1996资料')}
     ${deskIcon('browser','browser','Internet Explorer')}
-    ${deskDecor('photo','照片')}
+    ${deskIcon('folder','photos','照片')}
     ${deskIcon('lock','private','备份_旧')}
-    ${deskDecor('doc','毕业论文.doc')}
+    ${deskIcon('doc','thesis','毕业论文.doc')}
     ${deskIcon('doc','doc','备忘.txt')}
     ${deskIcon('sheet','timeline','调查记录.xls')}
     ${deskIcon('photo','photo','IMG_2002.jpg')}
     ${cacheReady?deskIcon('tmp','cache','cache_1127.tmp'):''}
    </div>
+   <div id="startMenu" class="start-menu" aria-hidden="true">
+    <div class="start-user"><div class="start-avatar">沈</div><b>沈妍</b></div>
+    <div class="start-columns"><div class="start-left">
+      <button data-open="browser"><img src="assets/icons/browser.png" alt="">Internet Explorer</button>
+      <button data-open="doc"><img src="assets/icons/doc.png" alt="">记事本</button>
+      <button data-open="timeline"><img src="assets/icons/sheet.png" alt="">Microsoft Excel</button>
+      <hr><button data-open="photos"><img src="assets/icons/photo.png" alt="">图片收藏</button>
+    </div><div class="start-right">
+      <button data-open="syfolder">我的文档</button><button data-open="photos">我的图片</button><button data-open="computer">我的电脑</button><hr><button class="start-static">控制面板</button><button class="start-static">帮助和支持</button><button class="start-static">搜索</button><button class="start-static">运行...</button>
+    </div></div>
+    <div class="start-footer"><span>注销</span><span>关闭计算机</span></div>
+   </div>
  </div>
- <div class="taskbar"><button class="start-button" aria-label="开始"><span class="start-flag"></span><b>开始</b></button><div class="task-app"><img src="assets/icons/folder.png" alt="">沈妍的电脑</div><div class="task-app"><img src="assets/icons/browser.png" alt="">欢迎回来...</div><div class="anchor-mini">${esc(a[0])}</div><div class="tray"><span class="tray-icons">◁　▥　◉</span><div class="clock">${clock()}<br>2026/09/12</div></div></div>
+ <div class="taskbar"><button class="start-button" id="startButton" aria-label="开始"><span class="start-flag"></span><b>开始</b></button><button class="task-app" data-open="computer"><img src="assets/icons/computer.png" alt="">沈妍的电脑</button><button class="task-app" data-open="browser"><img src="assets/icons/browser.png" alt="">欢迎回来...</button><div class="anchor-mini">${esc(a[0])}</div><div class="tray"><span class="tray-icons">🔊　▣　◉</span><div class="clock">${clock()}<br>2009/10/06</div></div></div>
  <button class="anchor-toggle" id="anchorToggle">提示</button><div id="anchorPanel" class="anchor-panel"><b>${esc(a[0])}</b><div class="sub">${esc(a[1])}</div></div>
  </div>`;
 }
-function deskIcon(cls,id,label){return `<button class="desk-icon" data-open="${id}"><img class="desk-ico-img" src="assets/icons/${cls}.png" alt=""><span>${esc(label)}</span></button>`}
-function deskDecor(cls,label){return `<div class="desk-decor"><img class="desk-ico-img" src="assets/icons/${cls}.png" alt=""><span>${esc(label)}</span></div>`}
+function deskIcon(cls,id,label){return `<button class="desk-icon" data-open="${id}" title="双击打开 ${esc(label)}"><img class="desk-ico-img" src="assets/icons/${cls}.png" alt=""><span>${esc(label)}</span></button>`}
+function deskDecor(cls,label){return deskIcon(cls,'doc',label)}
 function bindDesktop(){
- document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openWin(b.dataset.open));
+ document.querySelectorAll('[data-open]').forEach(b=>b.onclick=e=>{e.stopPropagation();openWin(b.dataset.open)});
+ const sb=document.getElementById('startButton'), sm=document.getElementById('startMenu');
+ if(sb&&sm) sb.onclick=e=>{e.stopPropagation();sm.classList.toggle('show');sm.setAttribute('aria-hidden',sm.classList.contains('show')?'false':'true')};
+ document.querySelectorAll('.start-static').forEach(b=>b.onclick=()=>{const sm=document.getElementById('startMenu');if(sm)sm.classList.remove('show')});
  document.getElementById('anchorToggle').onclick=()=>{anchorOpen=!anchorOpen;renderAnchor()};
+ document.querySelector('.desktop')?.addEventListener('click',e=>{if(!e.target.closest('.start-menu')&&!e.target.closest('#startButton'))document.getElementById('startMenu')?.classList.remove('show')});
 }
 function renderAnchor(){const p=document.getElementById('anchorPanel');if(!p)return;const a=anchor();p.innerHTML=`<b>${esc(a[0])}</b><div class="sub">${esc(a[1])}</div><hr><div class="sub">这是沈妍留在桌面的临时核对项，不是系统提示。</div>`;p.classList.toggle('show',anchorOpen)}
 function openWin(id){
@@ -93,44 +109,64 @@ function openWin(id){
 }
 function closeWin(){if(win==='timeline'&&has('final_date')&&has('final_photo')){state.ended=true;save();win=null;render();return}win=null;render()}
 function windowHTML(id){
- let title='',body='',small=false,type='explorer',toolbar='',menubar='';
- if(id==='doc'){title='备份说明.txt - 记事本';small=true;type='notepad';menubar='<div class="classic-menu">文件(F)　编辑(E)　格式(O)　查看(V)　帮助(H)</div>';body=`<div class="note-paper">沈妍的电脑从旧教学楼带回来时屏幕已经裂了。家属只说把重要资料先备份出来，别删原文件。<br><br>她最近查得最多的是 1996 年南关那件事。<br><br><span class="muted">浏览器历史被保留下来；部分本地缓存损坏。Internet 同步用户：sy0718（仅恢复书签与历史）。</span><br><br>— 维修点临时说明</div><div style="padding:9px 12px;background:#ece9d8;border-top:1px solid #aca899"><button id="resetBtn" class="classic-button">清除本地进度重新开始</button></div>`}
- if(id==='folder'){title='旧资料';type='explorer';menubar='<div class="classic-menu">文件(F)　编辑(E)　查看(V)　收藏(A)　工具(T)　帮助(H)</div>';toolbar='<div class="win-toolbar"><span class="tool-btn">← 后退</span><span class="tool-btn">↑</span><span class="tool-btn">搜索</span><span class="tool-btn">文件夹</span><div class="crumbbox"><b>地址</b>　C:\\Documents and Settings\\沈妍\\桌面\\旧资料</div></div>';body=folderHTML()}
- if(id==='photo'){title='IMG_2010_1004.jpg - 图片和传真查看器';type='photo-viewer';menubar='<div class="classic-menu">文件(F)　查看(V)　打印(P)　帮助(H)</div>';toolbar='<div class="photo-tools"><span>◀</span><span>▶</span><span>＋</span><span>－</span><span>旋转</span><span>打印</span></div>';body=photoHTML()}
- if(id==='timeline'){title='旧事时间表.xlsx - Microsoft Excel';type='sheet-viewer';menubar='<div class="classic-menu">文件(F)　编辑(E)　视图(V)　插入(I)　格式(O)　工具(T)　数据(D)　窗口(W)　帮助(H)</div>';toolbar='<div class="excel-ribbon classic-toolbar">新建　打开　保存　打印　撤销　重做　字体：宋体　字号：10　<B> B </B>　<I> I </I>　边框　Σ</div><div class="formula-bar"><span>fx</span><div>日期核对</div></div>';body=timelineHTML()}
- if(id==='private'){title='调查备忘.lock';type='private-window';menubar='<div class="classic-menu dark-menu">本地文件　安全　帮助</div>';body=privateLoginHTML()}
- return `<section class="window center ${small?'small ':''}${type}"><div class="titlebar"><span class="window-app-icon"></span><strong>${esc(title)}</strong><span class="win-min">_</span><span class="win-max">□</span><button class="win-close" id="winClose">×</button></div>${menubar}${toolbar}<div class="window-body">${body}</div><div class="window-status">就绪</div></section>`;
+ let title='',body='',small=false,type='explorer',toolbar='',menubar='',status='就绪';
+ const xpMenu='<div class="classic-menu">文件(F)　编辑(E)　查看(V)　收藏(A)　工具(T)　帮助(H)</div>';
+ const explorerToolbar=(path)=>`<div class="win-toolbar xp-toolbar"><button class="xp-tool">←</button><button class="xp-tool muted-tool">→</button><button class="xp-tool">↑</button><span class="xp-sep"></span><button class="xp-tool wide">🔍 搜索</button><button class="xp-tool wide">📁 文件夹</button><span class="xp-sep"></span><div class="crumbbox"><b>地址</b>　${path}</div><button class="xp-go">转到</button></div>`;
+ if(id==='doc'){title='备忘.txt - 记事本';small=true;type='notepad';menubar='<div class="classic-menu">文件(F)　编辑(E)　格式(O)　查看(V)　帮助(H)</div>';body=`<div class="note-paper notepad-paper">沈妍的电脑从旧教学楼带回来时屏幕已经裂了。家属只说把重要资料先备份出来，别删原文件。<br><br>她最近查得最多的是 1996 年南关那件事。<br><br>浏览器历史被保留下来；部分本地缓存损坏。<br><br>Internet 同步用户：sy0718（仅恢复书签与历史）。<br><br>— 维修点临时说明</div><div class="notepad-footer"><button id="resetBtn" class="classic-button">清除本地进度重新开始</button></div>`}
+ if(id==='computer'){title='我的电脑';type='explorer';menubar=xpMenu;toolbar=explorerToolbar('我的电脑');body=myComputerHTML();status='4 个对象'}
+ if(id==='recycle'){title='回收站';type='explorer';menubar=xpMenu;toolbar=explorerToolbar('回收站');body=recycleHTML();status='回收站中有 6 个对象'}
+ if(id==='syfolder'){title='沈妍的资料';type='explorer';menubar=xpMenu;toolbar=explorerToolbar('C:\\Documents and Settings\\沈妍\\我的文档\\沈妍的资料');body=syFolderHTML();status='11 个对象'}
+ if(id==='unsorted'){title='未整理';type='explorer';menubar=xpMenu;toolbar=explorerToolbar('C:\\Documents and Settings\\沈妍\\桌面\\未整理');body=unsortedHTML();status='8 个对象'}
+ if(id==='photos'){title='照片';type='explorer';menubar=xpMenu;toolbar=explorerToolbar('C:\\Documents and Settings\\沈妍\\我的文档\\我的图片');body=photosFolderHTML();status='17 个对象'}
+ if(id==='folder'){title='1996资料';type='explorer';menubar=xpMenu;toolbar=explorerToolbar('C:\\Documents and Settings\\沈妍\\桌面\\1996资料');body=folderHTML();status='10 个对象'}
+ if(id==='thesis'){title='毕业论文.doc - Microsoft Word';type='word-viewer';menubar='<div class="classic-menu">文件(F)　编辑(E)　视图(V)　插入(I)　格式(O)　工具(T)　表格(A)　窗口(W)　帮助(H)</div>';toolbar='<div class="word-toolbar">📄　📂　💾　🖨　↶　↷　│　样式：正文　字体：宋体　字号：小四　<b>B</b>　<i>I</i>　<u>U</u></div>';body=thesisHTML();status='第 1 页，共 42 页　　1 节'}
+ if(id==='photo'){title='IMG_2002.jpg - Windows 图片和传真查看器';type='photo-viewer';menubar='';toolbar='<div class="photo-tools"><span>◀</span><span>▶</span><span>⟲</span><span>⟳</span><span>🔍＋</span><span>🔍－</span><span>🖨</span><span>💾</span></div>';body=photoHTML();status='IMG_2002.jpg'}
+ if(id==='timeline'){title='调查记录.xls - Microsoft Excel';type='sheet-viewer';menubar='<div class="classic-menu">文件(F)　编辑(E)　视图(V)　插入(I)　格式(O)　工具(T)　数据(D)　窗口(W)　帮助(H)</div>';toolbar='<div class="excel-ribbon classic-toolbar">📄　📂　💾　🖨　↶　↷　│　字体：宋体　字号：10　<b>B</b>　<i>I</i>　<u>U</u>　▦　Σ</div><div class="formula-bar"><span class="namebox-mini">A1</span><span>fx</span><div>日期核对</div></div>';body=timelineHTML();status='就绪'}
+ if(id==='private'){title='调查备忘.lock';type='private-window';menubar='<div class="classic-menu">文件(F)　安全(S)　帮助(H)</div>';body=privateLoginHTML();status='本地加密文件'}
+ return `<section class="window center ${small?'small ':''}${type}"><div class="titlebar"><span class="window-app-icon ${type}"></span><strong>${esc(title)}</strong><button class="win-min" aria-label="最小化">_</button><button class="win-max" aria-label="最大化">□</button><button class="win-close" id="winClose" aria-label="关闭">×</button></div>${menubar}${toolbar}<div class="window-body">${body}</div><div class="window-status">${status}</div></section>`;
 }
-function bindWindow(){document.getElementById('winClose')?.addEventListener('click',closeWin);document.getElementById('resetBtn')?.addEventListener('click',()=>confirm('确定清除当前进度？')&&reset())}
+function bindWindow(){
+ document.getElementById('winClose')?.addEventListener('click',closeWin);
+ document.getElementById('resetBtn')?.addEventListener('click',()=>confirm('确定清除当前进度？')&&reset());
+ document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openWin(b.dataset.open));
+}
+function xpExplorerLayout(sideTitle,sideItems,main){return `<div class="explorer-layout"><aside class="explorer-tree xp-tasks"><div class="xp-taskbox"><h4>${sideTitle}</h4>${sideItems}</div><div class="xp-taskbox pale"><h4>其他位置</h4><button data-open="syfolder">我的文档</button><button data-open="computer">我的电脑</button><button data-open="recycle">回收站</button></div></aside><section class="explorer-main">${main}<div id="localPreview" class="local-preview"></div></section></div>`}
+function myComputerHTML(){return xpExplorerLayout('系统任务','<button class="static-task">查看系统信息</button><button class="static-task">添加或删除程序</button><button class="static-task">更改一个设置</button>',`<h3 class="explorer-section-title">存储在此计算机上的文件</h3><div class="xp-drive-list"><button class="xp-drive" data-open="syfolder"><img src="assets/icons/folder.png"><span><b>沈妍的文档</b><small>文件夹</small></span></button><button class="xp-drive" data-open="photos"><img src="assets/icons/photo.png"><span><b>共享文档</b><small>图片与扫描件</small></span></button></div><h3 class="explorer-section-title">硬盘驱动器</h3><div class="xp-drive-list"><div class="xp-drive static"><img src="assets/icons/drive_c.png"><span><b>本地磁盘 (C:)</b><small>38.2 GB 可用，共 74.5 GB</small><i><em style="width:48%"></em></i></span></div><div class="xp-drive static"><img src="assets/icons/drive_d.png"><span><b>资料盘 (D:)</b><small>9.1 GB 可用，共 19.5 GB</small><i><em style="width:54%"></em></i></span></div></div><h3 class="explorer-section-title">有可移动存储的设备</h3><div class="xp-drive-list"><div class="xp-drive static"><img src="assets/icons/cd.png"><span><b>DVD 驱动器 (E:)</b><small>没有光盘</small></span></div></div>`)}
+function recycleHTML(){return xpExplorerLayout('回收站任务','<button class="static-task">清空回收站</button><button class="static-task">还原所有项目</button>',`<div class="details-list"><div class="details-head"><span>名称</span><span>原位置</span><span>删除日期</span><span>大小</span></div>${[['IMG_0891副本.jpg','C:\\Documents and Settings\\沈妍\\桌面','2009-09-18','1.8 MB'],['淘宝订单截图.bmp','D:\\杂项','2009-08-04','824 KB'],['论坛摘录_旧.txt','D:\\未整理','2009-07-22','4 KB'],['meeting_final2.doc','我的文档','2009-06-11','96 KB'],['公交站牌.jpg','我的图片','2009-04-19','742 KB'],['新建文本文档.txt','桌面','2009-03-02','0 KB']].map(x=>`<div class="details-row"><span><img src="assets/icons/doc.png">${x[0]}</span><span>${x[1]}</span><span>${x[2]}</span><span>${x[3]}</span></div>`).join('')}</div>`)}
+function syFolderHTML(){return xpExplorerLayout('文件和文件夹任务','<button class="static-task">新建文件夹</button><button class="static-task">将此文件夹发布到 Web</button><button class="static-task">共享此文件夹</button>',`<div class="explorer-icon-grid rich"><button class="explorer-file" data-open="folder"><img src="assets/icons/folder.png"><span>1996资料</span></button><button class="explorer-file" data-open="photos"><img src="assets/icons/folder.png"><span>照片</span></button><button class="explorer-file" data-open="timeline"><img src="assets/icons/sheet.png"><span>调查记录.xls</span></button><button class="explorer-file" data-open="thesis"><img src="assets/icons/doc.png"><span>毕业论文.doc</span></button><button class="explorer-file" data-open="private"><img src="assets/icons/lock.png"><span>备份_旧</span></button><button class="explorer-file" data-open="doc"><img src="assets/icons/doc.png"><span>备忘.txt</span></button><div class="explorer-file static"><img src="assets/icons/folder.png"><span>工作</span></div><div class="explorer-file static"><img src="assets/icons/folder.png"><span>旅行</span></div><div class="explorer-file static"><img src="assets/icons/folder.png"><span>下载</span></div></div>`)}
+function unsortedHTML(){return xpExplorerLayout('文件和文件夹任务','<button class="static-task">新建文件夹</button><button class="static-task">按日期排列</button>',`<div class="explorer-icon-grid rich"><button class="explorer-file" data-local="unsorted1"><img src="assets/icons/doc.png"><span>todo_1014.txt</span></button><button class="explorer-file" data-local="unsorted2"><img src="assets/icons/doc.png"><span>论坛用户名.txt</span></button><div class="explorer-file static"><img src="assets/icons/photo.png"><span>站牌_旧.jpg</span></div><div class="explorer-file static"><img src="assets/icons/doc.png"><span>地图打印.pdf</span></div><div class="explorer-file static"><img src="assets/icons/tmp.png"><span>~$访谈记录.doc</span></div><div class="explorer-file static"><img src="assets/icons/folder.png"><span>网页缓存</span></div><div class="explorer-file static"><img src="assets/icons/doc.png"><span>号码.txt</span></div><div class="explorer-file static"><img src="assets/icons/photo.png"><span>旧校门.jpg</span></div></div>`)}
+function photosFolderHTML(){return xpExplorerLayout('图片任务','<button class="static-task">以幻灯片方式查看</button><button class="static-task">从相机或扫描仪获取图片</button><button class="static-task">打印图片</button>',`<div class="photo-folder-grid"><button class="photo-thumb" data-open="photo"><img src="assets/mother_child_photo.jpg"><span>IMG_2002.jpg</span></button><div class="photo-thumb static"><img src="assets/school_old.jpg"><span>二小旧楼.jpg</span></div><div class="photo-thumb static"><img src="assets/old_street.jpg"><span>南关旧街.jpg</span></div><div class="photo-thumb static"><img src="assets/festival.jpg"><span>庙会_2006.jpg</span></div><div class="photo-thumb static muted-photo"><div>无预览</div><span>IMG_1987.bmp</span></div><div class="photo-thumb static muted-photo"><div>无预览</div><span>scan_04.tif</span></div></div>`)}
+function thesisHTML(){return `<div class="word-workarea"><div class="word-ruler"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div><article class="word-page"><h1>地方都市传说传播机制中的<br>记忆重构与媒介再生产</h1><p class="word-meta">本科毕业论文　　沈妍<br>指导教师：周老师　　2009 年 5 月</p><h2>摘　要</h2><p>本文以地方性都市传说为研究对象，讨论报刊、口述记忆与网络论坛在叙事扩散过程中如何互相改写。研究发现，同一事件在不同记录体系中常出现人数、地点与称谓的偏差，这类偏差既可能来自统计口径，也可能被后来的讲述重新组织。</p><p>论文案例均来自公开材料，涉及真实人物的部分已作匿名处理。</p><p class="word-keywords"><b>关键词：</b>都市传说；地方记忆；网络论坛；媒介叙事</p><div class="page-break-line">— 1 —</div></article></div>`}
 function folderHTML(){
- return `<div class="explorer-layout">
-   <aside class="explorer-tree">
-    <div class="tree-title">文件夹</div>
-    <div>▾ 桌面</div><div class="tree-indent">▾ 我的文档</div><div class="tree-indent2">▾ 沈妍的资料</div><div class="tree-indent3 tree-selected">1996资料</div><div class="tree-indent3">照片</div><div class="tree-indent3">调查笔记</div><div class="tree-indent2">备份_旧</div><div>▸ 我的电脑</div><div>▸ 回收站</div>
-   </aside>
-   <section class="explorer-main">
-    <div class="explorer-icon-grid">
+ return xpExplorerLayout('文件和文件夹任务','<button class="static-task">新建文件夹</button><button class="static-task">将此文件夹发布到 Web</button><button class="static-task">共享此文件夹</button>',`<div class="explorer-icon-grid rich">
       <button class="explorer-file" data-local="clip"><img src="assets/icons/doc.png" alt=""><span>剪报索引_1996.txt</span></button>
       <button class="explorer-file" data-local="hehui"><img src="assets/icons/doc.png" alt=""><span>户籍摘录_何惠.txt</span></button>
       <button class="explorer-file" data-local="notes"><img src="assets/icons/doc.png" alt=""><span>核对项_未整理.txt</span></button>
       <button class="explorer-file" data-local="notice"><img src="assets/icons/doc.png" alt=""><span>寻人启事_排版稿.doc</span></button>
-      <div class="explorer-file static"><img src="assets/icons/doc.png" alt=""><span>公交线路_旧二路.pdf</span></div>
-      <div class="explorer-file static"><img src="assets/icons/photo.png" alt=""><span>南关地图_1994.jpg</span></div>
-      <div class="explorer-file static"><img src="assets/icons/folder.png" alt=""><span>报纸扫描</span></div>
-      <div class="explorer-file static"><img src="assets/icons/folder.png" alt=""><span>学校档案</span></div>
-      <div class="explorer-file static"><img src="assets/icons/folder.png" alt=""><span>派出所材料</span></div>
-      <div class="explorer-file static"><img src="assets/icons/folder.png" alt=""><span>私人记录</span></div>
-    </div><div id="localPreview" class="local-preview"></div>
-   </section>
- </div>`;
+      <button class="explorer-file" data-local="bus"><img src="assets/icons/doc.png" alt=""><span>公交线路_旧二路.pdf</span></button>
+      <button class="explorer-file" data-local="map"><img src="assets/icons/photo.png" alt=""><span>南关地图_1994.jpg</span></button>
+      <button class="explorer-file" data-local="papers"><img src="assets/icons/folder.png" alt=""><span>报纸扫描</span></button>
+      <button class="explorer-file" data-local="schoolfiles"><img src="assets/icons/folder.png" alt=""><span>学校档案</span></button>
+      <button class="explorer-file" data-local="policefiles"><img src="assets/icons/folder.png" alt=""><span>派出所材料</span></button>
+      <button class="explorer-file" data-local="privatefiles"><img src="assets/icons/folder.png" alt=""><span>私人记录</span></button>
+    </div>`);
 }
 function localPreview(type){
  const el=document.getElementById('localPreview'); if(!el)return;
- if(type==='clip') el.innerHTML=`<div class="note-paper"><b>1996 剪报索引</b><br>11/24 南关 / 儿童 / 一度失联<br>11/25 南关 / 怪老人 / 辟谣<br>11/27 已与家属取得联系<br><br>晚报数字馆：<button class="file-link" data-web="news">archive.heningdaily.local</button></div>`;
- if(type==='hehui') el.innerHTML=`<div class="scan"><b>户籍资料摘录（沈妍手抄）</b><br><br>姓名：何惠<br>出生：1988-03-09<br>原住址：南关区东河路 42 号<br>1996 年底迁出。<br><br><span style="color:#766">妈从来没跟我说过她具体是哪天转学的。</span></div>`;
- if(type==='notes') el.innerHTML=`<div class="note-paper">妈说她小时候“走丢过半天”。晚报写的是 5 个孩子，可论坛里有人说那几天学校至少少了一个班那么多人。<br><br>先别信论坛。把学校、报纸、警方的口径拆开看。<br><br>还有：那个老太太到底是在抓孩子，还是在找谁？</div>`;
- if(type==='notice'){mark('shenyan_notice');el.innerHTML=`<div class="scan"><div style="text-align:center;font-size:23px;font-weight:700">寻 人 启 事</div><br>沈妍，女，6岁，身高约118cm。2009年10月2日下午在南关早市附近与家人走散。走失时穿浅灰外套、红色布鞋。<br><br>联系人：何女士　联系电话：——<br><br><div class="muted">文件属性：创建于 2009-10-02 19:42；未发现打印记录。</div></div>`}
+ if(type==='clip') el.innerHTML=`<div class="note-paper file-preview"><b>1996 剪报索引</b><br><br>11/24 南关 / 儿童 / 一度失联<br>11/25 南关 / 怪老人 / 辟谣<br>11/27 已与家属取得联系<br><br>晚报数字馆：<button class="file-link" data-web="news">archive.heningdaily.local</button></div>`;
+ if(type==='hehui') el.innerHTML=`<div class="scan file-preview"><b>户籍资料摘录（沈妍手抄）</b><br><br>姓名：何惠<br>出生：1988-03-09<br>原住址：南关区东河路 42 号<br>1996 年底迁出。<br><br><span style="color:#766">妈从来没跟我说过她具体是哪天转学的。</span></div>`;
+ if(type==='notes') el.innerHTML=`<div class="note-paper file-preview">妈说她小时候“走丢过半天”。晚报写的是 5 个孩子，可论坛里有人说那几天学校至少少了一个班那么多人。<br><br>先别信论坛。把学校、报纸、警方的口径拆开看。<br><br>还有：那个老太太到底是在抓孩子，还是在找谁？</div>`;
+ if(type==='notice'){mark('shenyan_notice');el.innerHTML=`<div class="scan file-preview"><div style="text-align:center;font-size:23px;font-weight:700">寻 人 启 事</div><br>沈妍，女，6岁，身高约118cm。2009年10月2日下午在南关早市附近与家人走散。走失时穿浅灰外套、红色布鞋。<br><br>联系人：何女士　联系电话：——<br><br><div class="muted">文件属性：创建于 2009-10-02 19:42；未发现打印记录。</div></div>`}
+ if(type==='bus') el.innerHTML=`<div class="scan file-preview"><b>鹤宁市公共汽车旧线路表（节选）</b><hr>2 路：火车站 — 百货大楼 — 南关早市 — 东河路 — <b>旧二路终点</b><br>末班：19:10<br><br><span class="muted">1998 年调整后终点迁至东河桥。沈妍打印件边上写着：“2009 还这么叫的人，多半是老住户。”</span></div>`;
+ if(type==='map') el.innerHTML=`<div class="map-preview"><div class="map-paper"><b>南关街区图 · 1994</b><span class="road r1"></span><span class="road r2"></span><span class="road r3"></span><em class="pin p1">二小</em><em class="pin p2">槐树巷</em><em class="pin p3">旧二路终点</em></div></div>`;
+ if(type==='papers') el.innerHTML=`<div class="folder-preview-list"><b>报纸扫描</b><span>1996-11-24_03版.tif</span><span>1996-11-25_02版.tif</span><span>1996-11-27_03版.tif</span><span>1996-12-03_索引.jpg</span><button class="file-link" data-web="news">打开数字报刊镜像</button></div>`;
+ if(type==='schoolfiles') el.innerHTML=`<div class="folder-preview-list"><b>学校档案</b><span>1996_点名册.xls</span><span>班主任工作记录_三班.doc</span><span>转学登记摘录.txt</span><button class="file-link" data-web="school">打开鹤宁二小旧站</button></div>`;
+ if(type==='policefiles') el.innerHTML=`<div class="folder-preview-list"><b>派出所材料</b><span>公开情况说明_扫描.pdf</span><span>报案编号对照_手抄.txt</span><span class="muted">沈妍备注：警方登记的是“立案”，不是学校的“缺课”。</span></div>`;
+ if(type==='privatefiles') el.innerHTML=`<div class="folder-preview-list"><b>私人记录</b><span>何惠旧日历_目录.txt</span><span>照片背面抄录.txt</span><span>调查备忘.lock</span><button class="file-link" data-open="private">打开加密备忘</button></div>`;
+ if(type==='unsorted1') el.innerHTML=`<div class="note-paper file-preview">10/14<br>先查“5、6、4”到底各自统计的是什么。别把不一样的表格硬当成矛盾。<br><br>学校的“缺课”范围最大；报纸写的是家长一度联系不上；警方只算正式报案。</div>`;
+ if(type==='unsorted2') el.innerHTML=`<div class="note-paper file-preview">旧论坛账号可能是：槐树下喝茶 / 南关照相馆 / 小叶子。<br><br>妈以前提过“兰兰”这个名字吗？完全没印象。</div>`;
  el.querySelectorAll('[data-web]').forEach(b=>b.onclick=()=>openBrowser(b.dataset.web));
+ el.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openWin(b.dataset.open));
 }
 function photoHTML(){
  const locked=state.stage<6;
@@ -160,6 +196,7 @@ function privateLoginHTML(){
 function bindLocal(){
  bindWindow();
  document.querySelectorAll('[data-local]').forEach(b=>b.onclick=()=>localPreview(b.dataset.local));
+ document.querySelectorAll('.static-task,.xp-tool,.xp-go').forEach(b=>b.onclick=()=>{b.classList.add('pressed');setTimeout(()=>b.classList.remove('pressed'),120)});
  const fs=document.getElementById('finalSubmit'); if(fs)fs.onclick=()=>{const v=document.getElementById('finalDate').value.trim().replace(/[/.]/g,'-');if(v==='2009-10-04'||v==='20091004'){mark('final_date');win='timeline';render()}else document.getElementById('finalMsg').textContent='日期与原图信息对不上。'}; const fp=document.getElementById('finalPhoto'); if(fp)fp.onclick=()=>{mark('final_photo');win='timeline';render()};
  const ls=document.getElementById('loginSubmit'); if(ls)ls.onclick=()=>{const u=document.getElementById('loginUser').value.trim().toLowerCase();const p=document.getElementById('loginPass').value.trim();if((u==='sy0718'||u==='sheny0718'||u==='shenyan0718')&&p==='19880309'){mark('private_notes');win='private';render()}else document.getElementById('loginMsg').textContent='账号或校验信息不匹配。账号可在浏览器自动填充记录中找到。'};
 }

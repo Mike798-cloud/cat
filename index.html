@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>认生</title>
+  <meta name="description" content="《认生》网页解谜游戏" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="boot" class="boot"><div class="boot-logo">认生</div><div class="boot-line">正在恢复沈妍的电脑...</div></div>
+  <main id="app" aria-live="polite"></main>
+  <div id="blackout" class="blackout" aria-hidden="true"><div>你真的要继续查下去吗？</div></div>
+  <audio id="uiTone" preload="auto"></audio>
+  <script src="game-core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

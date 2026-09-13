@@ -1,0 +1,5 @@
+《认生》静态网页游戏
+
+部署：将本压缩包解压后，把 index.html、styles.css、app.js、game-core.js 与 assets 文件夹保持同级，直接上传到 Cloudflare Pages / GitHub Pages / 任意静态服务器即可。
+
+建议使用 HTTPS 访问。游戏进度保存在浏览器 localStorage。

@@ -60,9 +60,10 @@ function desktopHTML(){
  const cacheReady=has('hehui');
  return `<div class="os"><div class="desktop">
    <div class="desk-icons">
+    ${deskDecor('computer','我的电脑')}
     ${deskDecor('trash','回收站')}
     ${deskIcon('folder','folder','旧资料')}
-    ${deskIcon('browser','browser','Internet')}
+    ${deskIcon('browser','browser','Internet Explorer')}
     ${deskIcon('doc','doc','备份说明.txt')}
     ${deskDecor('folder','工作')}
     ${deskIcon('photo','photo','IMG_2010_1004.jpg')}
@@ -75,7 +76,7 @@ function desktopHTML(){
    </div>
    <div class="desktop-note"><div class="note-title">沈妍 / 临时便签</div><b>${esc(a[0])}</b><br>${esc(a[1])}</div>
  </div>
- <div class="taskbar"><span class="start-orb" aria-hidden="true"></span><div class="task-app">文件夹</div><div class="task-app">浏览器</div><div class="anchor-mini">${esc(a[0])}</div><div class="tray"><span>▴　▥</span><div class="clock">${clock()}<br>2026/09/12</div></div></div>
+ <div class="taskbar"><button class="start-button" aria-label="开始"><span class="start-flag">◆</span><b>开始</b></button><div class="task-app"><img src="assets/icons/folder.png" alt="">旧资料</div><div class="task-app"><img src="assets/icons/browser.png" alt="">Internet</div><div class="anchor-mini">${esc(a[0])}</div><div class="tray"><span class="tray-icons">▴　▥　◉</span><div class="clock">${clock()}<br>2026/09/12</div></div></div>
  <button class="anchor-toggle" id="anchorToggle">沈妍便签</button><div id="anchorPanel" class="anchor-panel"><b>${esc(a[0])}</b><div class="sub">${esc(a[1])}</div><hr><div class="sub">这是沈妍留在桌面的临时核对项，不是系统提示。</div></div>
  </div>`;
 }
@@ -93,13 +94,13 @@ function openWin(id){
 }
 function closeWin(){if(win==='timeline'&&has('final_date')&&has('final_photo')){state.ended=true;save();win=null;render();return}win=null;render()}
 function windowHTML(id){
- let title='',body='',small=false,type='explorer',toolbar='';
- if(id==='doc'){title='备份说明.txt - 记事本';small=true;type='notepad';body=`<div class="note-paper">沈妍的电脑从旧教学楼带回来时屏幕已经裂了。家属只说把重要资料先备份出来，别删原文件。<br><br>她最近查得最多的是 1996 年南关那件事。<br><br><span class="muted">浏览器历史被保留下来；部分本地缓存损坏。Chrome 同步用户：sy0718（仅恢复书签与历史）。</span><br><br>— 维修点临时说明</div><div style="padding:12px 18px;background:#f4f4f4;border-top:1px solid #ddd"><button id="resetBtn">清除本地进度重新开始</button></div>`}
- if(id==='folder'){title='旧资料';type='explorer';toolbar='<div class="win-toolbar"><span>组织　▼</span><span>打开</span><span>新建文件夹</span><div class="crumbbox">计算机 › 本地磁盘 (C:) › Users › shenyan › Desktop › 旧资料</div></div>';body=folderHTML()}
- if(id==='photo'){title='IMG_2010_1004.jpg - Windows 照片查看器';type='photo-viewer';body=photoHTML()}
- if(id==='timeline'){title='旧事时间表.xlsx - Microsoft Excel';type='sheet-viewer';toolbar='<div class="excel-ribbon">文件　 开始　 插入　 页面布局　 公式　 数据　 审阅　 视图</div><div class="formula-bar"><span>fx</span><div>日期核对</div></div>';body=timelineHTML()}
- if(id==='private'){title='调查备忘.lock';type='private-window';body=privateLoginHTML()}
- return `<section class="window center ${small?'small ':''}${type}"><div class="titlebar"><strong>${esc(title)}</strong><button class="win-close" id="winClose">×</button></div>${toolbar}<div class="window-body">${body}</div></section>`;
+ let title='',body='',small=false,type='explorer',toolbar='',menubar='';
+ if(id==='doc'){title='备份说明.txt - 记事本';small=true;type='notepad';menubar='<div class="classic-menu">文件(F)　编辑(E)　格式(O)　查看(V)　帮助(H)</div>';body=`<div class="note-paper">沈妍的电脑从旧教学楼带回来时屏幕已经裂了。家属只说把重要资料先备份出来，别删原文件。<br><br>她最近查得最多的是 1996 年南关那件事。<br><br><span class="muted">浏览器历史被保留下来；部分本地缓存损坏。Internet 同步用户：sy0718（仅恢复书签与历史）。</span><br><br>— 维修点临时说明</div><div style="padding:9px 12px;background:#ece9d8;border-top:1px solid #aca899"><button id="resetBtn" class="classic-button">清除本地进度重新开始</button></div>`}
+ if(id==='folder'){title='旧资料';type='explorer';menubar='<div class="classic-menu">文件(F)　编辑(E)　查看(V)　收藏(A)　工具(T)　帮助(H)</div>';toolbar='<div class="win-toolbar"><span class="tool-btn">← 后退</span><span class="tool-btn">↑</span><span class="tool-btn">搜索</span><span class="tool-btn">文件夹</span><div class="crumbbox"><b>地址</b>　C:\\Documents and Settings\\沈妍\\桌面\\旧资料</div></div>';body=folderHTML()}
+ if(id==='photo'){title='IMG_2010_1004.jpg - 图片和传真查看器';type='photo-viewer';menubar='<div class="classic-menu">文件(F)　查看(V)　打印(P)　帮助(H)</div>';toolbar='<div class="photo-tools"><span>◀</span><span>▶</span><span>＋</span><span>－</span><span>旋转</span><span>打印</span></div>';body=photoHTML()}
+ if(id==='timeline'){title='旧事时间表.xlsx - Microsoft Excel';type='sheet-viewer';menubar='<div class="classic-menu">文件(F)　编辑(E)　视图(V)　插入(I)　格式(O)　工具(T)　数据(D)　窗口(W)　帮助(H)</div>';toolbar='<div class="excel-ribbon classic-toolbar">新建　打开　保存　打印　撤销　重做　字体：宋体　字号：10　<B> B </B>　<I> I </I>　边框　Σ</div><div class="formula-bar"><span>fx</span><div>日期核对</div></div>';body=timelineHTML()}
+ if(id==='private'){title='调查备忘.lock';type='private-window';menubar='<div class="classic-menu dark-menu">本地文件　安全　帮助</div>';body=privateLoginHTML()}
+ return `<section class="window center ${small?'small ':''}${type}"><div class="titlebar"><span class="window-app-icon"></span><strong>${esc(title)}</strong><span class="win-min">_</span><span class="win-max">□</span><button class="win-close" id="winClose">×</button></div>${menubar}${toolbar}<div class="window-body">${body}</div><div class="window-status">就绪</div></section>`;
 }
 function bindWindow(){document.getElementById('winClose')?.addEventListener('click',closeWin);document.getElementById('resetBtn')?.addEventListener('click',()=>confirm('确定清除当前进度？')&&reset())}
 function folderHTML(){
@@ -154,7 +155,12 @@ function openBrowser(route,push=true){browserRoute=route||'news';win='browser';i
 function nav(route){openBrowser(route,true)}
 function renderBrowserShell(){
  const bb=browserRoute.split(':')[0]; const title=bb.startsWith('news')||bb==='police'?'鹤宁晚报数字报':bb.startsWith('school')||bb==='teacher'?'鹤宁第二小学':bb.startsWith('forum')||bb==='thread'?'南关人家':bb.startsWith('culture')?'鹤宁地方文化馆':bb.startsWith('library')||bb==='libdoc'?'鹤宁市图书馆':'网页';
- app.innerHTML=desktopHTML()+`<section class="browser-window"><div class="browser-tabs"><div class="browser-tab">${esc(title)}</div></div><div class="browser-top"><button class="navbtn" id="backBtn" ${historyIndex<=0?'disabled':''}>‹</button><button class="navbtn" id="fwdBtn" ${historyIndex>=historyStack.length-1?'disabled':''}>›</button><input id="address" class="address" value="http://${esc(routeUrl(browserRoute))}"><button id="goBtn" class="go">转到</button><button id="browserClose" class="close-browser">×</button></div><div class="bookmarkbar"><button data-nav="news">鹤宁晚报</button><button data-nav="school">鹤宁二小旧站</button><button data-nav="forum">南关人家</button><button data-nav="culture">地方文化馆</button><button data-nav="library">市图书馆</button></div><div id="browserContent" class="browser-content">${renderRoute(browserRoute)}</div><div class="browser-status">网页已从沈妍的浏览记录与本地镜像恢复 · 旧站链接可能失效</div></section><button class="anchor-toggle" id="anchorToggle">沈妍便签</button><div id="anchorPanel" class="anchor-panel"></div>`;
+ app.innerHTML=desktopHTML()+`<section class="browser-window">
+ <div class="browser-titlebar"><img src="assets/icons/browser.png" alt=""><strong>${esc(title)} - Internet Explorer</strong><div class="browser-window-controls"><span>_</span><span>□</span><button id="browserClose">×</button></div></div>
+ <div class="browser-menubar">文件(F)　编辑(E)　查看(V)　收藏夹(A)　工具(T)　帮助(H)</div>
+ <div class="browser-top"><button class="navbtn" id="backBtn" ${historyIndex<=0?'disabled':''}>←</button><button class="navbtn" id="fwdBtn" ${historyIndex>=historyStack.length-1?'disabled':''}>→</button><span class="navtext">停止</span><span class="navtext">刷新</span><span class="navtext">主页</span><span class="address-label">地址(D)</span><input id="address" class="address" value="http://${esc(routeUrl(browserRoute))}"><button id="goBtn" class="go">转到</button></div>
+ <div class="bookmarkbar"><span class="fav-label">链接</span><button data-nav="news">鹤宁晚报</button><button data-nav="school">鹤宁二小旧站</button><button data-nav="forum">南关人家</button><button data-nav="culture">地方文化馆</button><button data-nav="library">市图书馆</button></div>
+ <div id="browserContent" class="browser-content">${renderRoute(browserRoute)}</div><div class="browser-status"><span>完成</span><span>网页已从沈妍的浏览记录与本地镜像恢复 · 旧站链接可能失效</span><span>Internet</span></div></section><button class="anchor-toggle" id="anchorToggle">沈妍便签</button><div id="anchorPanel" class="anchor-panel"></div>`;
  bindBrowser();renderAnchor();
 }
 function routeUrl(r){const base=r.split(':')[0];if(base==='police')return'archive.heningdaily.local/attachment/ng-police-1996';if(base.startsWith('news'))return'archive.heningdaily.local/'+(base==='news'?'':'view/'+encodeURIComponent(r.split(':')[1]||'search'));if(base.startsWith('school')||base==='teacher')return'old.hn2ps.edu.local/'+(base==='school'?'':'archive/'+base);if(base.startsWith('forum')||base==='thread')return'bbs.nanguan.local/'+(base==='forum'?'':'thread/'+(r.split(':')[1]||'search'));if(base.startsWith('culture'))return'culture.hening.local/'+(base==='culture'?'':'data/'+(r.split(':')[1]||'search'));if(base.startsWith('library')||base==='libdoc')return'lib.hening.local/'+(base==='library'?'':'local/'+(r.split(':')[1]||'search'));return'local/'+r}

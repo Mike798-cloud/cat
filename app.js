@@ -2,24 +2,40 @@
 'use strict';
 const C=window.RenShengCore;
 const KEY='rensheng_web_v3';
-function load(){try{return C.normalize(JSON.parse(localStorage.getItem(KEY)||'null'));}catch(e){return C.fresh();}}
-function save(s){try{localStorage.setItem(KEY,JSON.stringify(s));}catch(e){}}
-let state=load();
+function readStored(){try{return C.normalize(JSON.parse(localStorage.getItem(KEY)||'null'));}catch(e){return C.fresh();}}
+function mergeState(a,b){
+  const x=C.normalize(a),y=C.normalize(b);
+  const seen={...x.seen,...y.seen};
+  const merged=C.normalize({seen,visits:Math.max(x.visits||0,y.visits||0),hintLevel:0});
+  merged.hintLevel=x.stage===y.stage?Math.max(x.hintLevel||0,y.hintLevel||0):0;
+  return merged;
+}
+function save(s){
+  const merged=mergeState(readStored(),s);
+  state=merged;
+  try{localStorage.setItem(KEY,JSON.stringify(merged));}catch(e){}
+  return merged;
+}
+let state=readStored();
 const mark=document.body.dataset.mark;
-if(mark){state=C.mark(state,mark);save(state);}
+if(mark){state=save(C.mark(readStored(),mark));}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+let renderInvestigator=()=>{};
 function buildInvestigator(){
   const host=document.getElementById('investigator-ui'); if(!host)return;
   const render=()=>{
+    const wasOpen=!!host.querySelector('.investigator-panel.open');
     const st=C.status(state); const pct=Math.round(Math.min(st.stage,st.total)/st.total*100);
     host.innerHTML=`<button class="investigator-toggle" aria-expanded="false" title="调查便笺（?）">调查便笺</button><section class="investigator-panel" aria-hidden="true"><button class="investigator-close" aria-label="关闭">×</button><div class="memo-title">随手记</div><div class="investigator-progress"><span>已记 ${Math.min(st.stage,st.total)} / ${st.total}</span><i><b style="width:${pct}%"></b></i></div><dl><dt>抄下来的</dt><dd>${esc(st.known)}</dd><dt>我还想核的</dt><dd>${esc(st.question)}</dd></dl><div class="hint-slot"></div><button class="investigator-hint" type="button">有点卡住</button><button class="investigator-reset" type="button">重新开始</button></section>`;
     const t=host.querySelector('.investigator-toggle'),p=host.querySelector('.investigator-panel');
     const setOpen=v=>{p.classList.toggle('open',v);p.setAttribute('aria-hidden',v?'false':'true');t.setAttribute('aria-expanded',v?'true':'false');};
     t.addEventListener('click',()=>setOpen(!p.classList.contains('open')));
     host.querySelector('.investigator-close').addEventListener('click',()=>setOpen(false));
-    host.querySelector('.investigator-hint').addEventListener('click',()=>{const r=C.hint(state);state=r.state;save(state);host.querySelector('.hint-slot').textContent=r.text;});
+    host.querySelector('.investigator-hint').addEventListener('click',()=>{const r=C.hint(mergeState(state,readStored()));state=save(r.state);host.querySelector('.hint-slot').textContent=r.text;});
     host.querySelector('.investigator-reset').addEventListener('click',()=>{if(confirm('清除本机调查进度并从晚报首页重新开始？')){localStorage.removeItem(KEY);const depth=Number(document.body.dataset.depth||0);location.href=depth===0?'index.html':'../'.repeat(depth)+'index.html';}});
+    if(wasOpen)setOpen(true);
   };
+  renderInvestigator=render;
   render();
 }
 function setupFilters(){
@@ -46,7 +62,19 @@ function setupFilters(){
     run();
   });
 }
-function setupExternal(){document.querySelectorAll('[data-external]').forEach(a=>{a.target='_blank';a.rel='noopener';a.addEventListener('click',()=>{state=C.mark(state,'visit_'+a.dataset.external);save(state);});});}
+function setupExternal(){document.querySelectorAll('[data-external]').forEach(a=>{a.target='_blank';a.rel='noopener';a.addEventListener('click',()=>{state=save(C.mark(readStored(),'visit_'+a.dataset.external));});});}
+function setupStateSync(){
+  window.addEventListener('storage',e=>{
+    if(e.key!==KEY)return;
+    if(e.newValue===null){state=C.fresh();renderInvestigator();return;}
+    try{state=mergeState(state,JSON.parse(e.newValue));renderInvestigator();}catch(err){}
+  });
+  window.addEventListener('focus',()=>{
+    if(localStorage.getItem(KEY)===null){if(Object.keys(state.seen||{}).length){state=C.fresh();renderInvestigator();}return;}
+    const merged=mergeState(state,readStored());
+    if(C.computeStage(merged)!==C.computeStage(state)||Object.keys(merged.seen||{}).length!==Object.keys(state.seen||{}).length){state=merged;renderInvestigator();}
+  });
+}
 function setupKeyboard(){document.addEventListener('keydown',e=>{if(e.key==='?'&&!/input|textarea/i.test(document.activeElement?.tagName||'')){e.preventDefault();document.querySelector('.investigator-toggle')?.click();}});}
 function setupCounter(){document.querySelectorAll('[data-fake-counter]').forEach((el,i)=>{const base=Number(el.dataset.fakeCounter)||32800;const day=new Date().getDate();el.textContent=String(base+day*7+i*13).padStart(6,'0');});}
 function once(selector,make){if(document.querySelector(selector))return;make();}
@@ -113,5 +141,5 @@ function setupArticleTools(){
 }
 buildInvestigator();
 enhanceLegacy();
-setupFilters();setupExternal();setupKeyboard();setupCounter();setupArticleTools();
+setupFilters();setupExternal();setupKeyboard();setupCounter();setupArticleTools();setupStateSync();
 })();

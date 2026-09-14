@@ -23,11 +23,10 @@ function normalize(s){
     n.visits=Number(s.visits)||0;
     n.hintLevel=Number(s.hintLevel)||0;
   }
-  // Compatibility with saves created before the old-paper checkpoint was split into two documents.
-  if(n.seen.news_1996){
-    n.seen.news_missing_1996=true;
-    n.seen.news_return_1996=true;
-  }
+  // Compatibility with older saves: the two old markers referred to the two separate reports.
+  // Do not let a save that only saw the first report silently complete the second report as well.
+  if(n.seen.news_1996)n.seen.news_missing_1996=true;
+  if(n.seen.news_followup)n.seen.news_return_1996=true;
   n.stage=computeStage(n);
   return n;
 }

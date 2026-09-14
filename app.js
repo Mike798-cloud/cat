@@ -20,14 +20,97 @@ let state=readStored();
 const mark=document.body.dataset.mark;
 if(mark){state=save(C.mark(readStored(),mark));}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+const SupportWall={
+  PAID_KEY:'_cat_support_paid_v1',
+  SESSION_KEY:'_cat_support_session_v1',
+  COOKIE_KEY:'_cat_support_flag_v1',
+  AUTO_KEY:'_cat_support_auto_seen_v1',
+  qr:'https://mike798-cloud.github.io/songtao-grainstation/paycode.png',
+  hasPaid(){
+    try{return !!(localStorage.getItem(this.PAID_KEY)||sessionStorage.getItem(this.SESSION_KEY)||this._getCookie(this.COOKIE_KEY));}catch(e){return false;}
+  },
+  markPaid(){
+    const token=this._token();
+    try{localStorage.setItem(this.PAID_KEY,token);localStorage.setItem(this.AUTO_KEY,'1');}catch(e){}
+    try{sessionStorage.setItem(this.SESSION_KEY,token);}catch(e){}
+    this._setCookie(this.COOKIE_KEY,token,365);
+  },
+  markSeen(){try{localStorage.setItem(this.AUTO_KEY,'1');}catch(e){}},
+  hasSeen(){try{return localStorage.getItem(this.AUTO_KEY)==='1';}catch(e){return false;}},
+  _token(){const raw=`${Date.now()}_${Math.random().toString(36).slice(2,10)}_cat`;try{return btoa(raw);}catch(e){return raw;}},
+  _setCookie(name,value,days){try{const d=new Date();d.setTime(d.getTime()+days*86400000);document.cookie=`${name}=${value};expires=${d.toUTCString()};path=/;SameSite=Lax`;}catch(e){}},
+  _getCookie(name){try{const key=name+'=';for(const part of document.cookie.split(';')){const c=part.trim();if(c.startsWith(key))return c.slice(key.length);}}catch(e){}return '';},
+  show(opts={}){
+    if(opts.auto&&this.hasSeen())return;
+    if(opts.auto)this.markSeen(); else if(!this.hasSeen())this.markSeen();
+    if(this.hasPaid()){this._toast('谢谢你之前的支持。旧网页还在，继续往下查吧。');return;}
+    let overlay=document.getElementById('paywall-overlay');
+    if(!overlay){
+      overlay=document.createElement('div');
+      overlay.id='paywall-overlay';
+      overlay.className='paywall-overlay';
+      overlay.innerHTML=`<div class="paywall-card" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+        <button class="paywall-close" type="button" aria-label="关闭支持页面">×</button>
+        <div class="paywall-card-inner">
+          <header class="paywall-header">
+            <div class="paywall-title-row"><span class="paywall-heart">♡</span><strong id="paywall-title" class="paywall-title">支持这部网页调查</strong><span class="paywall-heart">♡</span></div>
+            <div class="paywall-subtitle">1元自愿支持 · 不影响后续内容</div>
+          </header>
+          <div class="paywall-body">
+            <div class="paywall-qr-wrapper"><img src="${this.qr}" alt="1元支持收款码" class="paywall-qr-img" referrerpolicy="no-referrer"><div class="paywall-qr-glow"></div></div>
+            <div class="paywall-qr-tip">用支付宝扫码支持 1 元</div>
+            <div class="paywall-message">
+              <p class="paywall-msg-warm">旧报、校史、论坛这些页面，都是一点点磨出来的。</p>
+              <p class="paywall-msg-body">如果你在调查里碰到过哪一句让你停了一下，或者只是觉得这趟翻旧网页还算值得，<br>愿意的话，可以用 <strong>1元</strong> 支持后续创作。</p>
+              <p class="paywall-msg-cute">不支持也能完整玩下去。关掉这一页，调查照常继续。</p>
+              <p class="paywall-msg-warm2">谢谢你愿意把时间留给这些旧网页。</p>
+            </div>
+          </div>
+          <footer class="paywall-footer">
+            <div class="paywall-hint">这个提示只会自动出现一次；之后可用右下角“支持作者”再次打开。</div>
+            <div class="paywall-btns"><button class="paywall-btn paywall-btn-support" type="button">已完成支持 ♡</button><button class="paywall-btn paywall-btn-later" type="button">先继续调查</button></div>
+          </footer>
+        </div>
+      </div>`;
+      document.body.appendChild(overlay);
+      overlay.querySelector('.paywall-close').addEventListener('click',()=>this.hide());
+      overlay.querySelector('.paywall-btn-later').addEventListener('click',()=>this.hide());
+      overlay.querySelector('.paywall-btn-support').addEventListener('click',()=>{this.markPaid();this.hide();this._toast('谢谢。先把这页收好，继续往下查。');});
+      overlay.addEventListener('click',e=>{if(e.target===overlay)this.hide();});
+      overlay.querySelector('.paywall-qr-img').addEventListener('error',e=>{e.currentTarget.alt='收款码暂时没有加载出来，请稍后再试';e.currentTarget.classList.add('qr-error');});
+    }
+    overlay.style.display='flex';
+    document.documentElement.classList.add('paywall-open');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('paywall-show')));
+    setTimeout(()=>overlay.querySelector('.paywall-close')?.focus(),80);
+  },
+  hide(){
+    const overlay=document.getElementById('paywall-overlay');if(!overlay)return;
+    overlay.classList.add('paywall-closing');overlay.classList.remove('paywall-show');
+    document.documentElement.classList.remove('paywall-open');
+    setTimeout(()=>{overlay.style.display='none';overlay.classList.remove('paywall-closing');},320);
+  },
+  _toast(text){
+    document.querySelector('.paywall-toast')?.remove();
+    const t=document.createElement('div');t.className='paywall-toast';t.textContent=text;document.body.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add('show'));setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),350);},2600);
+  },
+  maybeAuto(stage){
+    if(this.hasSeen()||this.hasPaid())return;
+    if(document.body.dataset.site!=='archive'||stage<4)return;
+    setTimeout(()=>{if(!this.hasSeen()&&!this.hasPaid())this.show({auto:true});},1100);
+  }
+};
+window.CatSupport=SupportWall;
 let renderInvestigator=()=>{};
 function buildInvestigator(){
   const host=document.getElementById('investigator-ui'); if(!host)return;
   const render=()=>{
     const wasOpen=!!host.querySelector('.investigator-panel.open');
     const st=C.status(state); const pct=Math.round(Math.min(st.stage,st.total)/st.total*100);
-    host.innerHTML=`<button class="investigator-toggle" aria-expanded="false" title="调查便笺（?）">调查便笺</button><section class="investigator-panel" aria-hidden="true"><button class="investigator-close" aria-label="关闭">×</button><div class="memo-title">随手记</div><div class="investigator-progress"><span>已记 ${Math.min(st.stage,st.total)} / ${st.total}</span><i><b style="width:${pct}%"></b></i></div><dl><dt>抄下来的</dt><dd>${esc(st.known)}</dd><dt>我还想核的</dt><dd>${esc(st.question)}</dd></dl><div class="hint-slot"></div><button class="investigator-hint" type="button">有点卡住</button><button class="investigator-reset" type="button">重新开始</button></section>`;
+    host.innerHTML=`<div class="investigator-actions"><button class="investigator-toggle" aria-expanded="false" title="调查便笺（?）">调查便笺</button><button class="support-toggle" type="button" title="自愿支持作者">支持作者 1元</button></div><section class="investigator-panel" aria-hidden="true"><button class="investigator-close" aria-label="关闭">×</button><div class="memo-title">随手记</div><div class="investigator-progress"><span>已记 ${Math.min(st.stage,st.total)} / ${st.total}</span><i><b style="width:${pct}%"></b></i></div><dl><dt>抄下来的</dt><dd>${esc(st.known)}</dd><dt>我还想核的</dt><dd>${esc(st.question)}</dd></dl><div class="hint-slot"></div><button class="investigator-hint" type="button">有点卡住</button><button class="investigator-reset" type="button">重新开始</button></section>`;
     const t=host.querySelector('.investigator-toggle'),p=host.querySelector('.investigator-panel');
+    host.querySelector('.support-toggle')?.addEventListener('click',()=>SupportWall.show({auto:false}));
     const setOpen=v=>{p.classList.toggle('open',v);p.setAttribute('aria-hidden',v?'false':'true');t.setAttribute('aria-expanded',v?'true':'false');};
     t.addEventListener('click',()=>setOpen(!p.classList.contains('open')));
     host.querySelector('.investigator-close').addEventListener('click',()=>setOpen(false));
@@ -75,7 +158,7 @@ function setupStateSync(){
     if(C.computeStage(merged)!==C.computeStage(state)||Object.keys(merged.seen||{}).length!==Object.keys(state.seen||{}).length){state=merged;renderInvestigator();}
   });
 }
-function setupKeyboard(){document.addEventListener('keydown',e=>{if(e.key==='?'&&!/input|textarea/i.test(document.activeElement?.tagName||'')){e.preventDefault();document.querySelector('.investigator-toggle')?.click();}});}
+function setupKeyboard(){document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('paywall-overlay')?.classList.contains('paywall-show')){SupportWall.hide();return;}if(e.key==='?'&&!/input|textarea/i.test(document.activeElement?.tagName||'')){e.preventDefault();document.querySelector('.investigator-toggle')?.click();}});}
 function setupCounter(){document.querySelectorAll('[data-fake-counter]').forEach((el,i)=>{const base=Number(el.dataset.fakeCounter)||32800;const day=new Date().getDate();el.textContent=String(base+day*7+i*13).padStart(6,'0');});}
 function once(selector,make){if(document.querySelector(selector))return;make();}
 function enhanceNews(){
@@ -142,4 +225,5 @@ function setupArticleTools(){
 buildInvestigator();
 enhanceLegacy();
 setupFilters();setupExternal();setupKeyboard();setupCounter();setupArticleTools();setupStateSync();
+SupportWall.maybeAuto(C.computeStage(mergeState(state,readStored())));
 })();

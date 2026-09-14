@@ -59,13 +59,13 @@ function enhanceNews(){
   nav.querySelectorAll('a').forEach(a=>{const t=a.textContent.trim();if(map[t])a.href=map[t];});
   const shownDate=(head.querySelector('.news-date')?.textContent||'2026年9月13日　星期日').trim();
   once('.news-utility',()=>head.insertAdjacentHTML('beforebegin',`<div class="legacy-strip news-utility"><span>${esc(shownDate)}　鹤宁：多云转阴 17～24℃</span><span>设为首页　|　加入收藏　|　投稿信箱　|　报社简介　|　联系我们</span></div>`));
-  once('.news-ticker',()=>nav.insertAdjacentHTML('afterend',`<div class="news-ticker"><b>滚动：</b>供热注水试压陆续开始　·　南关老市场消防检查结束　·　市图书馆周末恢复晚间开放　·　数字报1990—2002年目录继续补录</div>`));
+  once('.news-ticker',()=>nav.insertAdjacentHTML('afterend',`<div class="news-ticker"><b>滚动：</b>供热注水试压陆续开始　·　南关老市场消防检查结束　·　数字报历史目录继续补录</div>`));
   const home=document.querySelector('.news-home');
   if(home&&!home.classList.contains('has-rail')){
     home.classList.add('has-rail');
-    home.insertAdjacentHTML('afterbegin',`<aside class="news-left-rail"><section><h3>新闻频道</h3><a href="news/local.html">本地</a><a href="news/local.html#social">社会</a><a href="news/life.html">民生</a><a href="news/education.html">教育</a><a href="news/education.html#culture">文化</a><a href="news/archive.html">历史报刊</a></section><section><h3>便民查询</h3><a href="news/bus.html">公交调整</a><a href="news/heating.html">供热通知</a><a href="news/library-hours.html">图书馆</a><span>天气预报</span><span>值班电话</span></section><section class="news-smallad"><b>报料热线</b><strong>0437-6210***</strong><small>新闻线索经核实采用后与提供人联系</small></section></aside>`);
+    home.insertAdjacentHTML('afterbegin',`<aside class="news-left-rail"><section><h3>新闻频道</h3><a href="news/local.html">本地</a><a href="news/local.html#social">社会</a><a href="news/life.html">民生</a><a href="news/education.html">教育</a><a href="news/education.html#culture">文化</a><a href="news/archive.html">历史报刊</a></section><section><h3>便民查询</h3><a href="news/bus.html">公交调整</a><a href="news/heating.html">供热通知</a><a href="news/library-hours.html">图书馆</a><span>天气预报</span></section><section class="news-smallad"><b>报料热线</b><strong>0437-6210***</strong><small>新闻线索经核实采用后与提供人联系</small></section></aside>`);
     const cols=home.querySelector('.news-columns');
-    if(cols)cols.insertAdjacentHTML('afterend',`<div class="news-linkbar"><b>友情链接：</b><span>鹤宁市人民政府</span><span>市公安局</span><span>市教育局</span><span>市公交公司</span><span>鹤宁广播电视台</span><span>市气象局</span></div>`);
+    if(cols)cols.insertAdjacentHTML('afterend',`<div class="news-linkbar"><b>友情链接：</b><span>鹤宁市人民政府</span><span>市教育局</span><span>市公交公司</span><span>鹤宁广播电视台</span></div>`);
   }
   const article=document.querySelector('.article-page');
   if(article&&!article.querySelector('.article-tools')){

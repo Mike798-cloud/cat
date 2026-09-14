@@ -106,3 +106,23 @@
   .forum-post{grid-template-columns:58px minmax(0,1fr)!important}.forum-post aside small.user-stats{display:none}
   .investigator-panel{left:6px;right:6px;width:auto;max-width:none}
 }
+
+/* 2026-09-14 final depth/QA pass: fewer content blocks, safer medium widths */
+.news-brief-box,.notice-table,.press-note{margin:12px 0;border:1px solid #aaa;background:#f4f1e8;padding:8px 10px;font:12px/1.65 SimSun,serif}
+.news-brief-box b,.notice-table b,.press-note b{display:block;color:#7b0b0d;margin-bottom:4px}
+.news-brief-box span,.notice-table span{display:block;padding:2px 0;border-top:1px dotted #bbb}.notice-table span:first-of-type{border-top:0}
+.press-note p{font-size:13px!important;line-height:1.65!important;text-indent:0!important;margin:4px 0!important}
+@media(max-width:960px){
+  .school-wrap{grid-template-columns:1fr}
+  .school-side{min-height:0;border-right:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:8px}
+  .school-side>b,.school-side>h3{grid-column:1/-1}
+  .school-side>a,.school-side>span{min-width:0;white-space:normal;overflow-wrap:anywhere}
+  .school-side-extra{grid-column:1/-1}
+  .school-main{padding:5px 7px 18px;overflow-x:hidden}
+}
+@media(max-width:680px){
+  .school-main{overflow-x:auto}
+  .school-table{min-width:620px!important;width:620px!important;table-layout:auto!important}
+  .school-table th,.school-table td{font-size:10px;padding:5px 5px;white-space:normal}
+}
+@media(max-width:430px){.news-columns{grid-template-columns:1fr 1fr}.news-columns>div{min-height:0}}

@@ -12,7 +12,7 @@ function buildInvestigator(){
   const host=document.getElementById('investigator-ui'); if(!host)return;
   const render=()=>{
     const st=C.status(state); const pct=Math.round(Math.min(st.stage,st.total)/st.total*100);
-    host.innerHTML=`<button class="investigator-toggle" aria-expanded="false" title="调查便笺（?）">调查便笺</button><section class="investigator-panel" aria-hidden="true"><button class="investigator-close" aria-label="关闭">×</button><div class="memo-title">随手记</div><div class="investigator-progress"><span>${Math.min(st.stage,st.total)} / ${st.total}</span><i><b style="width:${pct}%"></b></i></div><dl><dt>已经对上的</dt><dd>${esc(st.known)}</dd><dt>下一件值得核的</dt><dd>${esc(st.question)}</dd></dl><div class="hint-slot"></div><button class="investigator-hint" type="button">有点卡住</button><button class="investigator-reset" type="button">重新开始</button></section>`;
+    host.innerHTML=`<button class="investigator-toggle" aria-expanded="false" title="调查便笺（?）">调查便笺</button><section class="investigator-panel" aria-hidden="true"><button class="investigator-close" aria-label="关闭">×</button><div class="memo-title">随手记</div><div class="investigator-progress"><span>${Math.min(st.stage,st.total)} / ${st.total}</span><i><b style="width:${pct}%"></b></i></div><dl><dt>目前记下的</dt><dd>${esc(st.known)}</dd><dt>下一处可核对</dt><dd>${esc(st.question)}</dd></dl><div class="hint-slot"></div><button class="investigator-hint" type="button">有点卡住</button><button class="investigator-reset" type="button">重新开始</button></section>`;
     const t=host.querySelector('.investigator-toggle'),p=host.querySelector('.investigator-panel');
     const setOpen=v=>{p.classList.toggle('open',v);p.setAttribute('aria-hidden',v?'false':'true');t.setAttribute('aria-expanded',v?'true':'false');};
     t.addEventListener('click',()=>setOpen(!p.classList.contains('open')));
@@ -36,12 +36,18 @@ function setupCounter(){document.querySelectorAll('[data-fake-counter]').forEach
 function once(selector,make){if(document.querySelector(selector))return;make();}
 function enhanceNews(){
   const head=document.querySelector('.news-head'),nav=document.querySelector('.news-nav'); if(!head||!nav)return;
-  once('.news-utility',()=>head.insertAdjacentHTML('beforebegin',`<div class="legacy-strip news-utility"><span>2026年9月13日　农历八月初三　鹤宁：多云转阴 17～24℃</span><span>设为首页　|　加入收藏　|　投稿信箱　|　报社简介　|　联系我们</span></div>`));
+  const depth=Number(document.body.dataset.depth||0);
+  const newsBase=depth===0?'news/':'';
+  const homeHref=depth===0?'index.html':'../index.html';
+  const map={首页:homeHref,本地:newsBase+'local.html',社会:newsBase+'local.html#social',民生:newsBase+'life.html',教育:newsBase+'education.html',文化:newsBase+'education.html#culture',数字报刊:newsBase+'archive.html'};
+  nav.querySelectorAll('a').forEach(a=>{const t=a.textContent.trim();if(map[t])a.href=map[t];});
+  const shownDate=(head.querySelector('.news-date')?.textContent||'2026年9月13日　星期日').trim();
+  once('.news-utility',()=>head.insertAdjacentHTML('beforebegin',`<div class="legacy-strip news-utility"><span>${esc(shownDate)}　鹤宁：多云转阴 17～24℃</span><span>设为首页　|　加入收藏　|　投稿信箱　|　报社简介　|　联系我们</span></div>`));
   once('.news-ticker',()=>nav.insertAdjacentHTML('afterend',`<div class="news-ticker"><b>滚动：</b>供热注水试压陆续开始　·　南关老市场消防检查结束　·　市图书馆周末恢复晚间开放　·　数字报1990—2002年目录继续补录</div>`));
   const home=document.querySelector('.news-home');
   if(home&&!home.classList.contains('has-rail')){
     home.classList.add('has-rail');
-    home.insertAdjacentHTML('afterbegin',`<aside class="news-left-rail"><section><h3>新闻频道</h3><a href="index.html#local">本地</a><a href="index.html#local">社会</a><a href="index.html#life">民生</a><a href="index.html#education">教育</a><a href="index.html#culture">文化</a><a href="news/archive.html">历史报刊</a></section><section><h3>便民查询</h3><a href="news/bus.html">公交调整</a><a href="news/heating.html">供热通知</a><a href="news/library-hours.html">图书馆</a><span>天气预报</span><span>值班电话</span></section><section class="news-smallad"><b>报料热线</b><strong>0437-6210***</strong><small>新闻线索经核实采用后与提供人联系</small></section></aside>`);
+    home.insertAdjacentHTML('afterbegin',`<aside class="news-left-rail"><section><h3>新闻频道</h3><a href="news/local.html">本地</a><a href="news/local.html#social">社会</a><a href="news/life.html">民生</a><a href="news/education.html">教育</a><a href="news/education.html#culture">文化</a><a href="news/archive.html">历史报刊</a></section><section><h3>便民查询</h3><a href="news/bus.html">公交调整</a><a href="news/heating.html">供热通知</a><a href="news/library-hours.html">图书馆</a><span>天气预报</span><span>值班电话</span></section><section class="news-smallad"><b>报料热线</b><strong>0437-6210***</strong><small>新闻线索经核实采用后与提供人联系</small></section></aside>`);
     const cols=home.querySelector('.news-columns');
     if(cols)cols.insertAdjacentHTML('afterend',`<div class="news-linkbar"><b>友情链接：</b><span>鹤宁市人民政府</span><span>市公安局</span><span>市教育局</span><span>市公交公司</span><span>鹤宁广播电视台</span><span>市气象局</span></div>`);
   }
@@ -58,7 +64,7 @@ function enhanceSchool(){
   const side=document.querySelector('.school-side');
   if(side&&!side.querySelector('.school-side-extra'))side.insertAdjacentHTML('beforeend',`<div class="school-side-extra"><b>常用栏目</b><span>作息时间</span><span>值周安排</span><span>下载专区</span><span>家长学校</span><span>校园安全</span><small>网站维护：信息技术组<br>页面最佳显示：1024×768</small></div>`);
   const main=document.querySelector('.school-main');
-  if(main&&!main.querySelector('.school-badge-row'))main.insertAdjacentHTML('beforeend',`<div class="school-badge-row"><span>文明单位</span><span>平安校园</span><span>语言文字规范校</span><span>少先队示范校</span></div>`);
+  if(main&&main.querySelector('.school-boxes')&&!main.querySelector('.school-badge-row'))main.insertAdjacentHTML('beforeend',`<div class="school-badge-row"><span>文明单位</span><span>平安校园</span><span>语言文字规范校</span><span>少先队示范校</span></div>`);
 }
 function enhanceArchive(){
   const head=document.querySelector('.archive-head'),nav=document.querySelector('.archive-nav'); if(!head||!nav)return;

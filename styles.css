@@ -19,22 +19,22 @@
 /* NOTES — ordinary hand-made personal page, not a designer's retro page */
 .site-notes{background:#c6c6c0;font-family:SimSun,serif;background-image:repeating-linear-gradient(0deg,#c6c6c0 0,#c6c6c0 18px,#cecec8 19px)}.site-notes a{color:#283d87;text-decoration:underline}.notes-webhost{width:870px;background:#e7e5dc;border:1px solid #969185;border-bottom:0;color:#777}.notes-head{width:870px;max-width:100%;margin:0 auto;background:#f4edd8;padding:12px 15px 8px;border:1px solid #968f80;border-bottom:0;display:flex;justify-content:space-between;align-items:end}.notes-head h1{margin:0;font:31px KaiTi,SimSun,serif;color:#373631}.notes-head p{margin:2px 0 0;color:#777;font-size:11px}.notes-small{font-size:10px;color:#777}.notes-nav{width:870px;max-width:100%;margin:auto;background:#524d44;color:#fff;padding-left:6px;border-left:1px solid #777;border-right:1px solid #777}.notes-nav a,.notes-nav span{display:inline-block;padding:6px 9px;text-decoration:none;font-size:11px;border-right:1px solid #777;color:#fff}.notes-wrap{width:870px;max-width:100%;margin:auto;background:#fffdf4;border:1px solid #968f80;border-top:0;display:grid;grid-template-columns:1fr 208px;gap:14px;padding:14px}.notes-intro{grid-column:1/2;border-bottom:1px dotted #aaa;font-size:12px}.notes-list{grid-column:1/2}.notes-item{display:grid;grid-template-columns:100px 1fr;text-decoration:none;padding:7px 3px;border-bottom:1px dotted #999;font-size:12px}.notes-item time{color:#888}.notes-about{grid-column:2;grid-row:1/3;border-left:1px solid #bbb;padding-left:11px;font-size:11px}.notes-counter{margin-top:16px;border-top:1px dotted #aaa;padding-top:7px;color:#777;line-height:1.6}.notes-article{max-width:760px;margin:9px auto;background:#fffdf5;border:1px solid #968f80;padding:23px 32px 38px;min-height:690px}.notes-article h1{font:25px KaiTi,SimSun,serif;border-bottom:1px dotted #999;padding-bottom:6px}.notes-article p{font-size:14px;line-height:1.9}.notes-box{margin:14px 0;border:1px solid #b2a78f;background:#f0ead9;padding:8px;display:grid;gap:4px;font-size:12px}.paper-scan,.calendar-scan{background:#efe8d3;border:1px solid #baad90;padding:13px 15px;margin:14px 0;box-shadow:1px 1px 2px #0002}.paper-scan span{display:block;padding:4px 0;border-bottom:1px dotted #aaa}.calendar-scan p{margin:7px 0;font-size:13px}.photo-record{display:grid;grid-template-columns:1.05fr 1fr;gap:11px;border:1px solid #b8aa8c;padding:9px;background:#eee7d5}.photo-back{min-height:150px;border:1px solid #989078;background:#ded6c0;padding:16px 14px;color:#504c43;font:13px/1.8 KaiTi,SimSun,serif;position:relative}.photo-back:after{content:"HN12-1004-37";position:absolute;right:9px;bottom:8px;color:#8a4f45;border:1px solid #9a675f;padding:1px 4px;transform:rotate(-3deg);font:10px monospace}.photo-record dl{margin:0;font-size:12px}.photo-record dt{color:#777;margin-top:7px}.photo-record dd{margin:2px 0}.ending-link{display:inline-block;margin-top:14px;font-weight:bold}.end-card{margin-top:23px;border:2px solid #333;padding:13px;display:grid;gap:7px;background:#f4eddf}.notes-scratch{font-family:KaiTi,SimSun,serif;color:#555;background:#fff8d9;border-left:3px solid #999;padding:7px 9px;margin:10px 0}.news-update-note{margin:16px 0;padding:8px;border:1px solid #aaa;background:#eeeeea;font-size:12px}
 
-/* misc + responsive */
-.school-main,.archive-main{min-width:0}.school-table,.archive-table{max-width:100%}a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #ff7a00;outline-offset:2px}
-@media(max-width:800px){
-  .legacy-strip{width:100%!important;flex-wrap:wrap;line-height:1.4}.legacy-strip span:last-child{text-align:left}
-  .news-home,.news-columns,.school-wrap,.archive-wrap,.notes-wrap,.news-home.has-rail{grid-template-columns:1fr}.news-head,.school-head,.archive-head{margin-top:0}.news-brand b{font-size:29px;letter-spacing:4px}.news-date,.school-motto{display:none}.news-nav,.school-nav,.archive-nav,.forum-nav{overflow:auto}.news-nav span,.news-nav a,.school-nav a,.school-nav span,.archive-nav a,.archive-nav span,.forum-nav a,.forum-nav span{white-space:nowrap}.news-page{padding:10px 8px}.article-page{padding:14px 13px 28px}.article-page h1{font-size:22px}.article-tools{display:block;line-height:1.7}.news-home.has-rail>.news-left-rail{display:none}.news-home.has-rail>.news-lead,.news-home.has-rail>aside:not(.news-left-rail),.news-home.has-rail>.news-columns,.news-home.has-rail>.news-linkbar{grid-column:1;grid-row:auto}.news-row{grid-template-columns:82px 1fr}.news-row em{display:none}.archive-status{grid-template-columns:72px 72px 1fr}.archive-status>*:last-child{display:none}.school-wrap,.archive-wrap{padding:4px}.school-side,.archive-side{min-height:0;border-right:0;display:grid;grid-template-columns:repeat(2,1fr);margin-bottom:8px;padding-right:0}.school-side-extra,.archive-side-extra{grid-column:1/-1}.school-main,.archive-main{padding:4px;overflow-x:auto}.school-head h1{font-size:24px}.school-boxes{grid-template-columns:1fr 1fr}.forum-cols,.forum-row{grid-template-columns:1fr 82px 40px}.forum-post{grid-template-columns:78px 1fr}.forum-tools{display:block}.forum-tools input{width:100%;margin-bottom:5px}.forum-loginbar{display:none}.forum-adbar{white-space:normal}.notes-head{margin-top:0}.notes-about{grid-column:1;grid-row:auto;border-left:0;border-top:1px solid #ddd;padding:11px 0 0}.notes-article{padding:18px 13px;margin-top:0}.photo-record{grid-template-columns:1fr}.investigator-toggle{right:6px;bottom:6px}.investigator-panel{right:6px;bottom:40px}.school-table,.archive-table{font-size:11px;min-width:620px}.teacher-note{padding:11px;min-width:0}.school-sitebar,.news-ticker{white-space:normal}.news-linkbar{line-height:1.7}.news-quicklist{grid-template-columns:1fr}
-}
-@media print{.investigator-toggle,.investigator-panel,.legacy-strip,.news-nav,.news-ticker,.article-tools,.news-footer,.school-nav,.forum-nav,.archive-nav{display:none!important}.news-page,.article-page{border:0;width:auto;max-width:none}.site-news{background:#fff}}
+/* misc + responsive — one authoritative pass, no stacked breakpoint patches */
+.school-main,.archive-main,.teacher-note,.cross-source,.school-table,.archive-table{min-width:0;overflow-wrap:anywhere}
+.school-table,.archive-table{max-width:100%}
+.school-table th,.school-table td,.archive-table th,.archive-table td{word-break:break-word}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #ff7a00;outline-offset:2px}
 
-/* 2026-09-14 pass: keep the deliberately old school skin without letting it break content */
-.school-side,.school-side-extra,.school-main{min-width:0}
 .school-side{overflow:hidden}
 .school-side-extra{width:100%;margin-top:7px}
 .school-side-extra b,.school-side-extra span,.school-side-extra small{display:block!important;width:100%;white-space:normal;overflow-wrap:anywhere}
 .school-side-extra span{padding:5px 7px!important;border-bottom:1px dotted #bfe6f7!important;background:#0f71a9!important;color:#fff!important;font-size:11px!important;line-height:1.35}
-.school-main,.teacher-note,.cross-source,.school-table{overflow-wrap:anywhere}
-.school-table th,.school-table td{word-break:break-word}
+.school-side h3{margin:0;padding:7px 8px;background:#075795;border-bottom:2px solid #e9f7ff;color:#fff;font:bold 13px SimSun}
+.school-boxes>section{border:1px solid #4d9bc9;padding:7px;background:#fff4a7;font-size:11px;min-width:0}
+.school-boxes>section:nth-child(2){background:#dff0ff}.school-boxes>section:nth-child(3){background:#f5ffd0}
+.school-boxes>section h2{font-size:14px!important;margin:0 0 4px!important;padding:3px!important;border-bottom:1px solid #d40000!important}
+.school-boxes>section p{margin:0;padding:4px 2px;border-bottom:1px dotted #8ca4b4;line-height:1.4}
+
 .news-list-page{max-width:900px}
 .news-list-head{border-bottom:3px double #8e0000;margin-bottom:8px;padding-bottom:6px}
 .news-list-head h1{font:24px SimSun,serif;margin:4px 0}.news-list-head p{font-size:12px;color:#777;margin:4px 0;line-height:1.5}
@@ -43,75 +43,27 @@
 .news-list-section a,.news-list-section span{display:grid;grid-template-columns:92px 1fr;gap:9px;padding:7px 8px;border-bottom:1px dotted #aaa;text-decoration:none;font:12px/1.5 SimSun;color:#333}
 .news-list-section a:hover{background:#fff2bf}.news-list-section time{color:#888}.news-list-section small{color:#888}
 .story-quiet-note{margin:14px 0;padding:8px 10px;border-left:3px solid #9d957e;background:#f5f3ea;color:#68635a;font:12px/1.7 SimSun}
-
-@media(max-width:900px){
-  .school-wrap{grid-template-columns:1fr}
-  .school-side{min-height:0;border-right:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:8px}
-  .school-side>b,.school-side>h3{grid-column:1/-1}
-  .school-side>a,.school-side>span{min-width:0;white-space:normal;overflow-wrap:anywhere}
-  .school-side-extra{grid-column:1/-1}
-  .school-main{padding:5px 7px 18px;overflow-x:hidden}
-}
-@media(max-width:800px){
-  .school-table,.archive-table{min-width:0!important;width:100%;table-layout:fixed}
-  .school-table th,.school-table td,.archive-table th,.archive-table td{padding:5px 4px;font-size:10px;line-height:1.35}
-  .school-boxes{grid-template-columns:1fr!important}
-  .school-head{min-height:82px}.school-mark{width:50px;height:50px}.school-head h1{font-size:22px!important}
-  .news-list-section a,.news-list-section span{grid-template-columns:76px 1fr}
-}
-@media(max-width:520px){
-  .school-side-extra{display:none}
-  .school-side{grid-template-columns:1fr 1fr}
-  .school-side a,.school-side span{font-size:11px;padding:6px 7px}
-  .school-main h2{font-size:18px}
-  .school-table{font-size:10px}
-  .forum-post{grid-template-columns:66px minmax(0,1fr)!important}
-  .forum-post aside{padding:7px 3px}.forum-post>div{padding:7px 8px;min-width:0}
-  .forum-post p{overflow-wrap:anywhere}
-}
-.school-side h3{margin:0;padding:7px 8px;background:#075795;border-bottom:2px solid #e9f7ff;color:#fff;font:bold 13px SimSun}
-.school-boxes>section{border:1px solid #4d9bc9;padding:7px;background:#fff4a7;font-size:11px;min-width:0}
-.school-boxes>section:nth-child(2){background:#dff0ff}.school-boxes>section:nth-child(3){background:#f5ffd0}.school-boxes>section h2{font-size:14px!important;margin:0 0 4px!important;padding:3px!important;border-bottom:1px solid #d40000!important}
-.school-boxes>section p{margin:0;padding:4px 2px;border-bottom:1px dotted #8ca4b4;line-height:1.4}
-
-/* 2026-09-14 investigation/QA pass */
 .edition-tag{font-size:10px;color:#777;font-weight:normal;margin-left:4px}
 .filter-message{margin:8px 0;padding:8px 10px;border:1px dashed #aaa;background:#f5f3eb;color:#68635a;font:12px/1.6 SimSun,serif}
 .school-search-panel{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid #5b91b3;background:#e5f3fb;padding:6px 8px;margin:8px 0;font:11px SimSun}
 .school-search-panel input{width:280px;max-width:55vw;border:1px solid #888;height:22px;padding:2px 4px;font:12px SimSun}
 .school-search-panel span{color:#666}
-.news-rows [hidden],#school-archive-rows [hidden]{display:none!important}
+.archive-search small{color:#777;line-height:1.4}
+.news-rows [hidden],#school-archive-rows [hidden],#archive-catalog [hidden],#thread-list [hidden]{display:none!important}
 .forum-row>*,.forum-post>*,.news-row>*{min-width:0}
 .forum-title,.forum-post p,.forum-post div{overflow-wrap:anywhere}
 .investigator-panel dd{white-space:normal;overflow-wrap:anywhere}
+.news-brief-box,.notice-table,.press-note{margin:12px 0;border:1px solid #aaa;background:#f4f1e8;padding:8px 10px;font:12px/1.65 SimSun,serif}
+.news-brief-box b,.notice-table b,.press-note b{display:block;color:#7b0b0d;margin-bottom:4px}
+.news-brief-box span,.notice-table span{display:block;padding:2px 0;border-top:1px dotted #bbb}.notice-table span:first-of-type{border-top:0}
+.press-note p{font-size:13px!important;line-height:1.65!important;text-indent:0!important;margin:4px 0!important}
+
 @media(max-width:980px){
   .forum-wrap,.forum-head,.forum-top,.forum-nav,.forum-loginbar,.forum-adbar{width:100%}
   .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 116px 48px}
   .forum-post{grid-template-columns:98px minmax(0,1fr)}
 }
-@media(max-width:900px){
-  .school-nav{overflow-x:auto;display:flex;flex-wrap:nowrap}
-  .school-nav a,.school-nav span{flex:0 0 auto;white-space:nowrap}
-  .school-table,.archive-table{width:100%;table-layout:fixed;min-width:0!important}
-  .school-table th,.school-table td,.archive-table th,.archive-table td{overflow-wrap:anywhere;word-break:break-word}
-}
-@media(max-width:680px){
-  .school-search-panel{display:block}.school-search-panel input{width:100%;max-width:none;margin-top:4px}.school-search-panel span{display:block;margin-top:5px}
-  .school-table th:nth-child(3),.school-table td:nth-child(3){display:none}
-  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 74px 34px}
-}
-@media(max-width:430px){
-  .school-table th,.school-table td{font-size:9px;padding:4px 3px}
-  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 62px 28px;font-size:10px}
-  .forum-post{grid-template-columns:58px minmax(0,1fr)!important}.forum-post aside small.user-stats{display:none}
-  .investigator-panel{left:6px;right:6px;width:auto;max-width:none}
-}
 
-/* 2026-09-14 final depth/QA pass: fewer content blocks, safer medium widths */
-.news-brief-box,.notice-table,.press-note{margin:12px 0;border:1px solid #aaa;background:#f4f1e8;padding:8px 10px;font:12px/1.65 SimSun,serif}
-.news-brief-box b,.notice-table b,.press-note b{display:block;color:#7b0b0d;margin-bottom:4px}
-.news-brief-box span,.notice-table span{display:block;padding:2px 0;border-top:1px dotted #bbb}.notice-table span:first-of-type{border-top:0}
-.press-note p{font-size:13px!important;line-height:1.65!important;text-indent:0!important;margin:4px 0!important}
 @media(max-width:960px){
   .school-wrap{grid-template-columns:1fr}
   .school-side{min-height:0;border-right:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:8px}
@@ -119,10 +71,57 @@
   .school-side>a,.school-side>span{min-width:0;white-space:normal;overflow-wrap:anywhere}
   .school-side-extra{grid-column:1/-1}
   .school-main{padding:5px 7px 18px;overflow-x:hidden}
+  .school-nav{overflow-x:auto;display:flex;flex-wrap:nowrap}
+  .school-nav a,.school-nav span{flex:0 0 auto;white-space:nowrap}
 }
+
+@media(max-width:800px){
+  .legacy-strip{width:100%!important;flex-wrap:wrap;line-height:1.4}.legacy-strip span:last-child{text-align:left}
+  .news-home,.news-columns,.archive-wrap,.notes-wrap,.news-home.has-rail{grid-template-columns:1fr}
+  .news-head,.school-head,.archive-head{margin-top:0}.news-brand b{font-size:29px;letter-spacing:4px}.news-date,.school-motto{display:none}
+  .news-nav,.archive-nav,.forum-nav{overflow-x:auto}
+  .news-nav span,.news-nav a,.archive-nav a,.archive-nav span,.forum-nav a,.forum-nav span{white-space:nowrap}
+  .news-page{padding:10px 8px}.article-page{padding:14px 13px 28px}.article-page h1{font-size:22px}.article-tools{display:block;line-height:1.7}
+  .news-home.has-rail>.news-left-rail{display:none}
+  .news-home.has-rail>.news-lead,.news-home.has-rail>aside:not(.news-left-rail),.news-home.has-rail>.news-columns,.news-home.has-rail>.news-linkbar{grid-column:1;grid-row:auto}
+  .news-row{grid-template-columns:82px 1fr}.news-row em{display:none}.archive-status{grid-template-columns:72px 72px 1fr}.archive-status>*:last-child{display:none}
+  .archive-wrap{padding:4px}.archive-side{min-height:0;border-right:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:8px;padding-right:0}.archive-side-extra{grid-column:1/-1}.archive-main{padding:4px;overflow-x:hidden}
+  .school-head{min-height:82px}.school-mark{width:50px;height:50px}.school-head h1{font-size:22px!important}.school-boxes{grid-template-columns:1fr!important}
+  .school-table,.archive-table{width:100%;min-width:0!important;table-layout:fixed;font-size:10px}
+  .school-table th,.school-table td,.archive-table th,.archive-table td{padding:5px 4px;font-size:10px;line-height:1.35;overflow-wrap:anywhere;word-break:break-word}
+  .teacher-note{padding:11px;min-width:0}
+  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 82px 40px}.forum-post{grid-template-columns:78px minmax(0,1fr)}
+  .forum-tools{display:block}.forum-tools input{width:100%;margin-bottom:5px}.forum-loginbar{display:none}.forum-adbar{white-space:normal}
+  .notes-head{margin-top:0}.notes-about{grid-column:1;grid-row:auto;border-left:0;border-top:1px solid #ddd;padding:11px 0 0}.notes-article{padding:18px 13px;margin-top:0}.photo-record{grid-template-columns:1fr}
+  .investigator-toggle{right:6px;bottom:6px}.investigator-panel{right:6px;bottom:40px}
+  .school-sitebar,.news-ticker{white-space:normal}.news-linkbar{line-height:1.7}.news-quicklist{grid-template-columns:1fr}
+  .news-list-section a,.news-list-section span{grid-template-columns:76px 1fr}
+}
+
 @media(max-width:680px){
-  .school-main{overflow-x:auto}
-  .school-table{min-width:620px!important;width:620px!important;table-layout:auto!important}
-  .school-table th,.school-table td{font-size:10px;padding:5px 5px;white-space:normal}
+  .school-search-panel,.archive-search{display:block}.school-search-panel input,.archive-search input{width:100%;max-width:none;margin:4px 0}.school-search-panel span,.archive-search small{display:block;margin-top:5px}
+  .attendance-table th:nth-child(2),.attendance-table td:nth-child(2){display:none}
+  .transfer-table th:nth-child(3),.transfer-table td:nth-child(3){display:none}
+  .school-catalog-table th:nth-child(3),.school-catalog-table td:nth-child(3){display:none}
+  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 74px 34px}
 }
-@media(max-width:430px){.news-columns{grid-template-columns:1fr 1fr}.news-columns>div{min-height:0}}
+
+@media(max-width:520px){
+  .school-side-extra,.archive-side-extra{display:none}
+  .school-side,.archive-side{grid-template-columns:1fr 1fr}
+  .school-side a,.school-side span,.archive-side a,.archive-side span{font-size:11px;padding:6px 7px}
+  .school-main h2{font-size:18px}.school-table{font-size:10px}
+  .forum-post{grid-template-columns:66px minmax(0,1fr)!important}.forum-post aside{padding:7px 3px}.forum-post>div{padding:7px 8px;min-width:0}.forum-post p{overflow-wrap:anywhere}
+  .archive-item{grid-template-columns:92px minmax(0,1fr)}.archive-item em{display:none}
+}
+
+@media(max-width:430px){
+  .news-columns{grid-template-columns:1fr}.news-columns>div{min-height:0}
+  .school-table th,.school-table td,.archive-table th,.archive-table td{font-size:9px;padding:4px 3px}
+  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 32px;font-size:10px}
+  .forum-cols>*:nth-child(2),.forum-row>*:nth-child(2){display:none}
+  .forum-post{grid-template-columns:58px minmax(0,1fr)!important}.forum-post aside .user-stats{display:none}
+  .investigator-panel{left:6px;right:6px;width:auto;max-width:none}
+}
+
+@media print{.investigator-toggle,.investigator-panel,.legacy-strip,.news-nav,.news-ticker,.article-tools,.news-footer,.school-nav,.forum-nav,.archive-nav{display:none!important}.news-page,.article-page{border:0;width:auto;max-width:none}.site-news{background:#fff}}

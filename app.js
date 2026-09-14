@@ -12,7 +12,7 @@ function buildInvestigator(){
   const host=document.getElementById('investigator-ui'); if(!host)return;
   const render=()=>{
     const st=C.status(state); const pct=Math.round(Math.min(st.stage,st.total)/st.total*100);
-    host.innerHTML=`<button class="investigator-toggle" aria-expanded="false" title="调查便笺（?）">调查便笺</button><section class="investigator-panel" aria-hidden="true"><button class="investigator-close" aria-label="关闭">×</button><div class="memo-title">随手记</div><div class="investigator-progress"><span>${Math.min(st.stage,st.total)} / ${st.total}</span><i><b style="width:${pct}%"></b></i></div><dl><dt>目前记下的</dt><dd>${esc(st.known)}</dd><dt>下一处可核对</dt><dd>${esc(st.question)}</dd></dl><div class="hint-slot"></div><button class="investigator-hint" type="button">有点卡住</button><button class="investigator-reset" type="button">重新开始</button></section>`;
+    host.innerHTML=`<button class="investigator-toggle" aria-expanded="false" title="调查便笺（?）">调查便笺</button><section class="investigator-panel" aria-hidden="true"><button class="investigator-close" aria-label="关闭">×</button><div class="memo-title">随手记</div><div class="investigator-progress"><span>已记 ${Math.min(st.stage,st.total)} / ${st.total}</span><i><b style="width:${pct}%"></b></i></div><dl><dt>抄下来的</dt><dd>${esc(st.known)}</dd><dt>我还想核的</dt><dd>${esc(st.question)}</dd></dl><div class="hint-slot"></div><button class="investigator-hint" type="button">有点卡住</button><button class="investigator-reset" type="button">重新开始</button></section>`;
     const t=host.querySelector('.investigator-toggle'),p=host.querySelector('.investigator-panel');
     const setOpen=v=>{p.classList.toggle('open',v);p.setAttribute('aria-hidden',v?'false':'true');t.setAttribute('aria-expanded',v?'true':'false');};
     t.addEventListener('click',()=>setOpen(!p.classList.contains('open')));
@@ -23,11 +23,27 @@ function buildInvestigator(){
   render();
 }
 function setupFilters(){
-  document.querySelectorAll('[data-filter-input]').forEach(inp=>{
+  document.querySelectorAll('[data-filter-input]').forEach((inp,idx)=>{
     const target=document.querySelector(inp.dataset.filterTarget); if(!target)return;
     const items=[...target.querySelectorAll('.filter-item')];
-    const run=()=>{const q=inp.value.trim().toLowerCase();let shown=0;items.forEach(it=>{const ok=!q||(it.dataset.search||it.textContent).toLowerCase().includes(q);it.hidden=!ok;if(ok)shown++;});let empty=target.querySelector('.filter-empty');if(!shown){if(!empty){empty=document.createElement('div');empty.className='filter-empty';empty.textContent='没有找到符合条件的条目。可以换日期、地名或更短的词。';target.appendChild(empty)}}else empty?.remove();};
-    inp.addEventListener('input',run); inp.addEventListener('keydown',e=>{if(e.key==='Escape'){inp.value='';run();}});
+    const min=Math.max(0,Number(inp.dataset.filterMin||0));
+    const prompt=inp.dataset.filterPrompt||'输入关键词后显示匹配条目。';
+    let note=null;
+    const showNote=text=>{
+      if(!note){note=document.createElement('div');note.className='filter-message';note.dataset.filterMessage=String(idx);const anchor=target.closest('table')||target;anchor.insertAdjacentElement('afterend',note);}
+      note.textContent=text;
+    };
+    const clearNote=()=>{if(note){note.remove();note=null;}};
+    const run=()=>{
+      const q=inp.value.trim().toLowerCase();
+      if(q.length<min){items.forEach(it=>it.hidden=true);showNote(prompt);return;}
+      let shown=0;
+      items.forEach(it=>{const ok=!q||(it.dataset.search||it.textContent).toLowerCase().includes(q);it.hidden=!ok;if(ok)shown++;});
+      if(!shown)showNote('没有找到符合条件的条目。可以换年份、地名或更短的词。'); else clearNote();
+    };
+    inp.addEventListener('input',run);
+    inp.addEventListener('keydown',e=>{if(e.key==='Escape'){inp.value='';run();}});
+    run();
   });
 }
 function setupExternal(){document.querySelectorAll('[data-external]').forEach(a=>{a.target='_blank';a.rel='noopener';a.addEventListener('click',()=>{state=C.mark(state,'visit_'+a.dataset.external);save(state);});});}
@@ -76,7 +92,7 @@ function enhanceArchive(){
 function hashName(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
 function enhanceForum(){
   const nav=document.querySelector('.forum-nav'); if(!nav)return;
-  once('.forum-loginbar',()=>nav.insertAdjacentHTML('afterend',`<div class="forum-loginbar"><span>用户名：<input aria-label="用户名" disabled>　密码：<input aria-label="密码" type="password" disabled>　<button type="button" disabled>登录</button></span><span>今日 27　|　昨日 63　|　主题 1,437　|　会员 3,086</span></div><div class="forum-adbar">[便民] 南关疏通下水道 24小时　　[转让] 凤凰自行车一辆　　[通知] 旧帖区自2014年起停止注册，仅保留检索</div>`));
+  once('.forum-loginbar',()=>nav.insertAdjacentHTML('afterend',`<div class="forum-loginbar"><span>用户名：<input aria-label="用户名" disabled>　密码：<input aria-label="密码" type="password" disabled>　<button type="button" disabled>登录</button></span><span>今日 27　|　昨日 63　|　主题 1,437　|　会员 3,086</span></div><div class="forum-adbar">[便民] 南关疏通下水道 24小时　　[转让] 凤凰自行车一辆　　[通知] 旧帖区已于2026年9月2日转为静态只读，注册与回复功能关闭</div>`));
   document.querySelectorAll('.forum-post aside').forEach(as=>{
     if(as.querySelector('.user-stats'))return;
     const name=as.querySelector('b')?.textContent.trim()||'游客', h=hashName(name);

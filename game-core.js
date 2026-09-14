@@ -4,16 +4,16 @@ if(typeof module==='object'&&module.exports) module.exports=api;
 root.RenShengCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
 const CHECKPOINTS=[
-{keys:['missing_article'],after:'沈妍失联前反复去南关，也在图书馆查过九十年代旧报；家里不知道她具体在核哪件事。',next:'她最近翻过的旧报里，哪些南关报道值得先互相对照？',hint1:'晚报首页的“数字报刊”能查历史版面。先试南关、儿童、学校等词。',hint2:'1996年11月下旬有几篇报道互相引用，先看它们各自说了什么，不急着下结论。'},
-{keys:['news_1996'],after:'11月24日报道暂有五名儿童未归；后续报道又承认报失、询问和学校缺勤的统计口径并不相同。',next:'报道提到二小重新核过低年级缺勤。学校自己的旧表格还在吗？',hint1:'11月27日报道里提到了鹤宁市第二小学。',hint2:'二小旧站的“校史资料”保留了少量文字转录。'},
-{keys:['school_attendance'],after:'二小核对表里有六个名字，但每个人的缺勤原因不同；何惠一栏写着“25日已找到、27日返校”。',next:'同批归档里，何惠返校以后又留下了什么记录？',hint1:'校史目录里还有1996年第四季度学籍异动材料。',hint2:'先看转学登记，再看与它一起扫描的原班级班务簿。'},
-{keys:['hehui','teacher_record'],after:'转学表登记东河路42号；班务簿却记下何惠自己写过“槐树巷17号”，随后被母亲划掉。',next:'1996年的“槐树巷17号”在地方资料里登记的是哪一户？',hint1:'班务簿页边注提到了市地方文献馆的旧门牌资料。',hint2:'到地方文献馆查旧城门牌簿，不要只看口述材料。'},
-{keys:['address17','folkname'],after:'旧门牌把17号记在冯家名下；另一份口述资料提到，有些老人会在孩子受惊或走丢回来后先叫全名，但受访者说法并不一致。',next:'这些名字和旧习惯，在南关居民自己的记忆里又是什么样？',hint1:'口述资料末尾留了“南关人家”旧论坛的入口。',hint2:'论坛里可搜“猫脸”“赵淑琴”“兰兰”，留意帖子之间不一致的部分。'},
-{keys:['zhao_forum'],after:'论坛里有人记得赵淑琴是在找外孙女，也有人对她出现的日期、地点说法不同；没人能把所有细节说圆。',next:'论坛中另一次“孩子走丢又找到”的旧帖，和何惠一家有没有关系？',hint1:'论坛首页里有一条2012年10月的求助后续。',hint2:'那条旧帖后来被账号 sy0718 重新顶起。'},
-{keys:['shenyan2012'],after:'2012年的旧帖提到一个被找回的小女孩；2026年，sy0718追问孩子的母亲是否叫何惠、小时候是否叫“妍妍”。',next:'sy0718是谁？她自己的公开资料能不能把2012年的身份对上？',hint1:'点开 sy0718 的公开资料页。',hint2:'先看1996的何惠、2012请假单和照片日期；把几项放在一起，别只挑异常的一条。'},
-{keys:['note_1996','note_absence','photo_meta'],after:'旧闻夹显示：何惠是沈妍的母亲；2012年沈妍的请假单、未张贴的寻人启事和相册日期彼此并不完全一致。',next:'何惠本人有没有留下2012年那几天的日常记录？',hint1:'“相册里那张照片”提到一本旧台历。',hint2:'看10月2日至8日原样抄录的几页，也别跳过那些看起来很普通的小事。'},
-{keys:['calendar'],after:'何惠的台历既记着孩子不认房间、迟迟不叫“妈”，也记着她仍记得只有家里人才知道的习惯。何惠后来不再继续写。',next:'沈妍失联前最后公开留下的调查方向是什么？',hint1:'台历页底部有沈妍自己的最后一条补记。',hint2:'她准备去见一名以前住过槐树巷的人；随后晚报刊出了家属后续。'},
-{keys:['ending'],after:'沈妍仍然失联。家属公开确认，她2012年走失后家里逐渐不再叫她“妍妍”，但母亲拒绝把那几天解释成任何超自然事件。',next:'公开资料没有给出唯一答案。前面的日期、称呼和几份互相矛盾的记录，只能由你自己判断。',hint1:'可以回看旧帖、班务簿和台历，看哪些细节彼此支持，哪些彼此冲突。',hint2:'不必只挑异常的一半材料。何惠后来仍把她当作女儿，这件事本身也是记录的一部分。'}
+{keys:['missing_article'],after:'9/10：沈妍失联。近期多次去南关；10日下午在图书馆查过九十年代《鹤宁晚报》缩微资料。',next:'先把她最近反复查的南关旧闻找出来。',hint1:'晚报“数字报刊”可以按地名、日期、标题检索。',hint2:'先试“南关”“儿童”“学校”这类她可能会用的词，不必一次把所有旧报都读完。'},
+{keys:['news_1996'],after:'11/24：报纸写“五名儿童未归”。11/27：写“四人陆续回家、一户仍在寻找”，并说明报失、询问、学校缺勤不是同一套数字。',next:'报纸提到二小重新核过低年级缺勤；学校自己的旧资料里会怎么记？',hint1:'11月27日那篇报道提到鹤宁市第二小学。',hint2:'二小旧站保留“校史资料”，按年份或“缺勤”检索比逐页翻更快。'},
+{keys:['school_attendance'],after:'二小核对表列了六个名字；备注并不相同。何惠一栏：25日“家长来电称已找到”，27日返校。',next:'同一时期还有没有何惠返校后的原始记录？',hint1:'校史目录里不只有缺勤表，还有学籍、班务一类资料。',hint2:'把第四季度学籍异动和原班级班务簿放在一起看。'},
+{keys:['hehui','teacher_record'],after:'学籍登记：东河路42号。班务簿：何惠自己写过“槐树巷17号”，母亲随后划掉；27—29日还留有点名、座位和转学记录。',next:'“槐树巷17号”当年登记的是谁家？',hint1:'班务簿页边有人后来补过“见市地方文献馆”。',hint2:'去查地方文献馆的旧门牌簿；口述材料先当旁证。'},
+{keys:['address17','folkname'],after:'旧门牌：17号登记在冯家名下。另一份口述材料记着“孩子受惊或走丢回来后先叫全名”的旧习惯，但几位受访者说法不一致。',next:'再看看南关居民自己怎样记赵淑琴、冯小兰和那几天。',hint1:'文献馆口述资料末尾留有“南关人家”旧论坛入口。',hint2:'搜“猫脸”“赵淑琴”“兰兰”，重点看楼层之间互相打架的地方。'},
+{keys:['zhao_forum'],after:'论坛：有人说赵淑琴只是在找外孙女；也有人记得她在不该出现的时间又出现过。帖子里的日期、地点并不能完全对齐。',next:'论坛里还有一次“孩子走丢后被找回”的旧帖；它和何惠一家是什么关系？',hint1:'论坛首页有一条2012年10月的“求助后续”。',hint2:'那条帖子在2026年被账号 sy0718 重新顶起。'},
+{keys:['shenyan2012'],after:'2012旧帖：孩子被找回；有人记得她说过“还是回你家吗”，也有人说她后来正常上学。2026年，sy0718追问孩子母亲是否叫何惠、小时候是否叫“妍妍”。',next:'sy0718是谁？先核她自己的公开资料。',hint1:'帖子里的 sy0718 有公开资料页。',hint2:'先看1996何惠、2012请假单、照片日期三项；异常和正常的细节都保留。'},
+{keys:['note_1996','note_absence','photo_meta'],after:'旧闻夹：何惠是沈妍的母亲；2012请假单、未使用的寻人纸、论坛发帖日期和照片冲印日期彼此差一天到两天。沈妍没有替原件改日期。',next:'何惠自己有没有记过2012年那几天？',hint1:'照片页提到她在母亲旧抽屉里找到一本2012台历。',hint2:'10月2日至8日的记录很密；看完异常句子，也看后面那些能对得上的生活习惯。'},
+{keys:['calendar'],after:'台历：孩子一度不认房间、迟迟不叫“妈”；随后又记得只有家里人才知道的叫猫方法。10月12日只剩一句“别记了”。',next:'沈妍失联前最后准备去核什么？',hint1:'台历抄录页下面还有沈妍9月8日的一条补记。',hint2:'她拿到一个“以前住槐树巷的人”的电话；之后晚报刊出了家属后续。'},
+{keys:['ending'],after:'9/14：沈妍仍未找到。何惠确认2012年走失后被找回的女孩就是沈妍，也拒绝把那段经历解释成超自然事件。',next:'公开报道没有再给出沈妍的去向。前面的记录仍有互相支持、也有互相冲突的部分。',hint1:'想复盘的话，可回看班务簿、2012旧帖和台历。',hint2:'别只留下最怪的一半：何惠最后仍坚持“她就是我女儿”。'}
 ];
 function fresh(){return {seen:{},stage:0,visits:0,hintLevel:0};}
 function normalize(s){const n=fresh();if(s&&typeof s==='object'){n.seen={...(s.seen||{})};n.visits=Number(s.visits)||0;n.hintLevel=Number(s.hintLevel)||0;}n.stage=computeStage(n);return n;}
@@ -21,6 +21,6 @@ function has(s,k){return !!(s.seen&&s.seen[k]);}
 function computeStage(s){let st=0;for(const cp of CHECKPOINTS){if(cp.keys.every(k=>has(s,k)))st++;else break;}return st;}
 function mark(s,k){const n=normalize(s);if(k&&!n.seen[k]){n.seen[k]=true;n.visits++;}const old=n.stage;n.stage=computeStage(n);if(n.stage!==old)n.hintLevel=0;return n;}
 function hint(s){const n=normalize(s);const cp=CHECKPOINTS[Math.min(n.stage,CHECKPOINTS.length-1)];n.hintLevel=Math.min(2,(n.hintLevel||0)+1);return {state:n,text:n.hintLevel===1?cp.hint1:cp.hint2};}
-function status(s){const n=normalize(s);if(n.stage===0)return {stage:0,total:CHECKPOINTS.length,known:'姐姐已经失联三天。公开报道只知道她最近常去南关，也查过不少旧报。',question:'她失联前到底在核什么？',hintLevel:n.hintLevel};const cp=CHECKPOINTS[Math.min(n.stage-1,CHECKPOINTS.length-1)];return {stage:n.stage,total:CHECKPOINTS.length,known:cp.after,question:cp.next,hintLevel:n.hintLevel};}
+function status(s){const n=normalize(s);if(n.stage===0)return {stage:0,total:CHECKPOINTS.length,known:'9月13日：姐姐沈妍已经失联三天。',question:'先从她失联前反复做的事查起。',hintLevel:n.hintLevel};const cp=CHECKPOINTS[Math.min(n.stage-1,CHECKPOINTS.length-1)];return {stage:n.stage,total:CHECKPOINTS.length,known:cp.after,question:cp.next,hintLevel:n.hintLevel};}
 return {CHECKPOINTS,fresh,normalize,has,mark,hint,computeStage,status};
 });

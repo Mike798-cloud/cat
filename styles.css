@@ -73,3 +73,36 @@
 .school-boxes>section{border:1px solid #4d9bc9;padding:7px;background:#fff4a7;font-size:11px;min-width:0}
 .school-boxes>section:nth-child(2){background:#dff0ff}.school-boxes>section:nth-child(3){background:#f5ffd0}.school-boxes>section h2{font-size:14px!important;margin:0 0 4px!important;padding:3px!important;border-bottom:1px solid #d40000!important}
 .school-boxes>section p{margin:0;padding:4px 2px;border-bottom:1px dotted #8ca4b4;line-height:1.4}
+
+/* 2026-09-14 investigation/QA pass */
+.edition-tag{font-size:10px;color:#777;font-weight:normal;margin-left:4px}
+.filter-message{margin:8px 0;padding:8px 10px;border:1px dashed #aaa;background:#f5f3eb;color:#68635a;font:12px/1.6 SimSun,serif}
+.school-search-panel{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid #5b91b3;background:#e5f3fb;padding:6px 8px;margin:8px 0;font:11px SimSun}
+.school-search-panel input{width:280px;max-width:55vw;border:1px solid #888;height:22px;padding:2px 4px;font:12px SimSun}
+.school-search-panel span{color:#666}
+.news-rows [hidden],#school-archive-rows [hidden]{display:none!important}
+.forum-row>*,.forum-post>*,.news-row>*{min-width:0}
+.forum-title,.forum-post p,.forum-post div{overflow-wrap:anywhere}
+.investigator-panel dd{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:980px){
+  .forum-wrap,.forum-head,.forum-top,.forum-nav,.forum-loginbar,.forum-adbar{width:100%}
+  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 116px 48px}
+  .forum-post{grid-template-columns:98px minmax(0,1fr)}
+}
+@media(max-width:900px){
+  .school-nav{overflow-x:auto;display:flex;flex-wrap:nowrap}
+  .school-nav a,.school-nav span{flex:0 0 auto;white-space:nowrap}
+  .school-table,.archive-table{width:100%;table-layout:fixed;min-width:0!important}
+  .school-table th,.school-table td,.archive-table th,.archive-table td{overflow-wrap:anywhere;word-break:break-word}
+}
+@media(max-width:680px){
+  .school-search-panel{display:block}.school-search-panel input{width:100%;max-width:none;margin-top:4px}.school-search-panel span{display:block;margin-top:5px}
+  .school-table th:nth-child(3),.school-table td:nth-child(3){display:none}
+  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 74px 34px}
+}
+@media(max-width:430px){
+  .school-table th,.school-table td{font-size:9px;padding:4px 3px}
+  .forum-cols,.forum-row{grid-template-columns:minmax(0,1fr) 62px 28px;font-size:10px}
+  .forum-post{grid-template-columns:58px minmax(0,1fr)!important}.forum-post aside small.user-stats{display:none}
+  .investigator-panel{left:6px;right:6px;width:auto;max-width:none}
+}
